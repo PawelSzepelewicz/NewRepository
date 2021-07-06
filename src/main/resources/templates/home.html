@@ -3,8 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>New title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<p th:text="'Hello, world'"/>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="main.js"></script>
+<script src="main.css"></script>
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user"
+               aria-selected="true">Users</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="compare-tab" data-toggle="tab" href="#compare" role="tab" aria-controls="compare"
+               aria-selected="false">Compare</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="bests-tab" data-toggle="tab" href="#bests" role="tab" aria-controls="bests"
+               aria-selected="false">Best users</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="user">Add user</div>
+        <div role="tabpanel" class="tab-pane" id="compare">Compare</div>
+        <div role="tabpanel" class="tab-pane" id="bests">View the best</div>
+    </div>
+</div>
 </body>
 </html>
