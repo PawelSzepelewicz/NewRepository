@@ -7,15 +7,15 @@
 
     <changeSet id="2021-07-06" author="PawelSzepelewicz">
 
-<sql dbms="mysql"
-     endDelimiter=";"
-     splitStatements="true"
-     stripComments="true">
-    Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (1, "Max", "good man", 2500);
-    Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (2, "Piotr", "bad man", 2500);
-    Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (3, "Ivan", "just a man", 2500);
+        <sql dbms="mysql"
+             endDelimiter=";"
+             splitStatements="true"
+             stripComments="true">
+            Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (1, "Max", "good man", 2500);
+            Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (2, "Piotr", "bad man", 2500);
+            Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (3, "Ivan", "just a man", 2500);
 
-</sql>
+        </sql>
 
     </changeSet>
 
