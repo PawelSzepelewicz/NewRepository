@@ -1,4 +1,4 @@
-package com.example.probation.Model;
+package com.example.probation.model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
