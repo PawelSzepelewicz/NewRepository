@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>New title</title>
@@ -33,7 +33,7 @@
     </ul>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="user">
-            <form>
+            <form th:method="POST" th:action="@{/addUser}">
                 <div class="form-group">
                     <label>User name</label>
                     <input type="text" class="form-control" aria-describedby="userName" placeholder="Enter your name">
@@ -41,7 +41,8 @@
                 <div class="form-group">
                     <label>Main information</label>
                     <input type="text" class="form-control" placeholder="Type the main information">
-                    <small id="emailHelp" class="form-text text-muted">Your can write a little about yourself here</small>
+                    <small id="emailHelp" class="form-text text-muted">Your can write a little about yourself
+                        here</small>
                 </div>
                 <button type="submit" onclick="" class="btn btn-primary">Add user</button>
             </form>
