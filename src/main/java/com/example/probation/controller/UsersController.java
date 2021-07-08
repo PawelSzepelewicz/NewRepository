@@ -7,14 +7,12 @@ import com.example.probation.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
 
 @RestController
 @RequestMapping("/users")
@@ -24,11 +22,7 @@ public class UsersController {
     private final UsersService service;
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody @Valid CreateUserDto newUser,
-                                              BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return null;
-        }
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid CreateUserDto newUser) {
         User user = mapper.map(newUser, User.class);
 
         return ResponseEntity.ok(mapper.map(service.saveNewUser(user), UserDto.class));

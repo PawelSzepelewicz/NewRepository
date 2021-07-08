@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
@@ -20,10 +19,10 @@ import javax.validation.constraints.Size;
 public class User extends AbstractEntity {
     private static final Integer INITIAL_RATING = 2500;
     @NotBlank(message = "Name is mandatory")
-    @Size(min=4, max=32, message="Name should be between 4 and 32 characters")
+    @Size(min = 4, max = 32, message = "Name should be between 4 and 32 characters")
     private String userName;
     @NotBlank(message = "Description of yourself is required")
-    @Size(min=1, max=1000, message="Try to reduce the information to 1000 characters")
+    @Size(min = 1, max = 1000, message = "Try to reduce the information to 1000 characters")
     private String description;
     private Integer rating = INITIAL_RATING;
 }
