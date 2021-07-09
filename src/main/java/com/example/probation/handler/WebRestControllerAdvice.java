@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,11 +15,10 @@ import java.util.stream.Collectors;
 public class WebRestControllerAdvice {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<List<ErrorsWrapper>> handleNotFoundException(ConstraintViolationException e) {
-        List<ErrorsWrapper> errorsWrapper = new ArrayList<>();
-        errorsWrapper.addAll(e.getConstraintViolations().stream().map(cv ->
-                new ErrorsWrapper(cv.getPropertyPath().toString(), cv.getMessage())).
-                collect(Collectors.toList()));
+    public ResponseEntity<List<ErrorsWrapper>> handleNotFoundException(final ConstraintViolationException e) {
+        final List<ErrorsWrapper> errorsWrapper = e.getConstraintViolations().stream().map(cv ->
+                new ErrorsWrapper(cv.getPropertyPath().toString(),
+                        cv.getMessage())).collect(Collectors.toList());
 
         return new ResponseEntity<>(errorsWrapper, HttpStatus.UNPROCESSABLE_ENTITY);
     }

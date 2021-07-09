@@ -22,8 +22,8 @@ public class UsersController {
     private final UsersService service;
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody @Valid CreateUserDto newUser) {
-        User user = mapper.map(newUser, User.class);
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid final CreateUserDto newUser) {
+        final var user = mapper.map(newUser, User.class);
 
         return ResponseEntity.ok(mapper.map(service.saveNewUser(user), UserDto.class));
     }

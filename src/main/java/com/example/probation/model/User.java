@@ -18,11 +18,12 @@ import javax.validation.constraints.Size;
 @Table(name = "users")
 public class User extends AbstractEntity {
     private static final Integer INITIAL_RATING = 2500;
-    @NotBlank(message = "Name is mandatory")
-    @Size(min = 4, max = 32, message = "Name should be between 4 and 32 characters")
+
+    @NotBlank(message = "{name.notempty}")
+    @Size(min = 4, max = 32, message = "{name.size}")
     private String userName;
-    @NotBlank(message = "Description of yourself is required")
-    @Size(min = 1, max = 1000, message = "Try to reduce the information to 1000 characters")
+    @NotBlank(message = "{description.notempty}")
+    @Size(min = 1, max = 1000, message = "{description.size}")
     private String description;
     private Integer rating = INITIAL_RATING;
 }
