@@ -1,4 +1,4 @@
-package com.example.probation.handler;
+package com.example.probation.controller.advice;
 
 import com.example.probation.model.ErrorsWrapper;
 import org.springframework.http.HttpStatus;
