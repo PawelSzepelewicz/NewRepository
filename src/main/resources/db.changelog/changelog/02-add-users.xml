@@ -4,9 +4,7 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-
     <changeSet id="2021-07-06" author="PawelSzepelewicz">
-
         <sql dbms="mysql"
              endDelimiter=";"
              splitStatements="true"
@@ -14,10 +12,6 @@
             Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (1, "Max", "good man", 2500);
             Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (2, "Piotr", "bad man", 2500);
             Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (3, "Ivan", "just a man", 2500);
-
         </sql>
-
     </changeSet>
-
-
 </databaseChangeLog>
