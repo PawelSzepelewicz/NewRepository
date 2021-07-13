@@ -20,7 +20,7 @@ public class User extends AbstractEntity {
     private static final Integer INITIAL_RATING = 2500;
 
     @NotBlank(message = "{name.notempty}")
-    @Size(min = 4, max = 32, message = "{name.size}")
+    @Size(min = 3, max = 32, message = "{name.size}")
     private String userName;
     @NotBlank(message = "{description.notempty}")
     @Size(min = 1, max = 1000, message = "{description.size}")

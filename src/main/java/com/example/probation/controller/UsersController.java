@@ -7,12 +7,10 @@ import com.example.probation.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -26,5 +24,15 @@ public class UsersController {
         final var user = mapper.map(newUser, User.class);
 
         return ResponseEntity.ok(mapper.map(service.saveNewUser(user), UserDto.class));
+    }
+
+    @PostMapping("/{winnerId}/win/{loserId}")
+    public void changeRating(@PathVariable("winnerId") User winner, @PathVariable("loserId") User loser) {
+          service.redefineRating(winner, loser);
+    }
+
+    @GetMapping("/random")
+    public List<User> getUsersForComparison() {
+        return service.getUsersForComparison();
     }
 }
