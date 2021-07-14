@@ -7,7 +7,7 @@ import java.util.List;
 public interface UsersService {
     User saveNewUser(final User newUser);
 
-    void redefineRating(User winner, User loser);
+    void redefineRating(final User winner, final User loser);
 
     List<User> getUsersForComparison();
 }

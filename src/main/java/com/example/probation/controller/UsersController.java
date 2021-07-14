@@ -1,6 +1,7 @@
 package com.example.probation.controller;
 
 import com.example.probation.model.CreateUserDto;
+import com.example.probation.model.SelectedUsersDto;
 import com.example.probation.model.User;
 import com.example.probation.model.UserDto;
 import com.example.probation.service.UsersService;
@@ -27,12 +28,12 @@ public class UsersController {
     }
 
     @PostMapping("/{winnerId}/win/{loserId}")
-    public void changeRating(@PathVariable("winnerId") User winner, @PathVariable("loserId") User loser) {
-          service.redefineRating(winner, loser);
+    public void changeRating(@PathVariable("winnerId") final User winner, @PathVariable("loserId") final User loser) {
+        service.redefineRating(winner, loser);
     }
 
     @GetMapping("/random")
-    public List<User> getUsersForComparison() {
-        return service.getUsersForComparison();
+    public ResponseEntity<List<SelectedUsersDto>> getUsersForComparison() {
+        return ResponseEntity.ok(mapper.mapAsList(service.getUsersForComparison(), SelectedUsersDto.class));
     }
 }
