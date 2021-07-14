@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -15,6 +17,19 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User saveNewUser(final User user) {
-       return usersRepository.save(user);
+        return usersRepository.save(user);
+    }
+
+    @Override
+    public void redefineRating(final User winner, final User loser) {
+        loser.setRating(loser.getRating() - 15);
+        winner.setRating(winner.getRating() + 15);
+        usersRepository.save(winner);
+        usersRepository.save(loser);
+    }
+
+    @Override
+    public List<User> getUsersForComparison() {
+        return usersRepository.getRandomUsers();
     }
 }
