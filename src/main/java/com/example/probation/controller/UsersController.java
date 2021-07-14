@@ -1,9 +1,6 @@
 package com.example.probation.controller;
 
-import com.example.probation.model.CreateUserDto;
-import com.example.probation.model.SelectedUsersDto;
-import com.example.probation.model.User;
-import com.example.probation.model.UserDto;
+import com.example.probation.model.*;
 import com.example.probation.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
@@ -28,8 +25,10 @@ public class UsersController {
     }
 
     @PostMapping("/{winnerId}/win/{loserId}")
-    public void changeRating(@PathVariable("winnerId") final User winner, @PathVariable("loserId") final User loser) {
+    public ResponseEntity<SuccessMessage> changeRating(@PathVariable("winnerId") final User winner, @PathVariable("loserId") final User loser) {
         service.redefineRating(winner, loser);
+
+        return ResponseEntity.ok(new SuccessMessage());
     }
 
     @GetMapping("/random")
