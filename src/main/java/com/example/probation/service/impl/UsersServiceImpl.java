@@ -32,4 +32,9 @@ public class UsersServiceImpl implements UsersService {
     public List<User> getUsersForComparison() {
         return usersRepository.getRandomUsers();
     }
+
+    @Override
+    public List<User> getTopUsersByRating() {
+        return usersRepository.findAllByRating();
+    }
 }

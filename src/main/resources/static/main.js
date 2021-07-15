@@ -1,5 +1,6 @@
 $(document).ready(
     function () {
+        getUsersByRating()
         getNextUsers()
         $('#userForm').submit(function (event) {
             event.preventDefault()
@@ -26,11 +27,12 @@ $(document).ready(
                 success: function (data) {
                     resetData()
                     $('.form-message').text('User has been created successfully.')
+                    resetRating()
                 },
                 error: function (errMsg) {
                     errMsg.responseJSON.forEach(error => {
                         let field = '#' + error.field
-                        $(field).closest('.form-group').append('<div class="invalid-feedback">' + error.field + ' ' + error.message + '</div>')
+                        $(field).closest('.form-group').append(`<di class="invalid-feedback">${error.field} ${error.message}</div>`)
                         $(field).addClass('is-invalid')
                         $(field).val('')
                     })
@@ -81,23 +83,63 @@ $(document).ready(
                 loserId: loserId,
             }
             $.ajax({
-                    type: 'POST',
-                    url: 'http://localhost:8080/users/' + formData.winnerId + '/win/' + formData.loserId,
-                    data: JSON.stringify(formData),
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-                        console.log('success')
-                    },
-                    error: function (errMsg) {
-                        console.log('error')
-                    }
-                })
+                type: 'POST',
+                url: `http://localhost:8080/users/${formData.winnerId}/win/${formData.loserId}`,
+                data: JSON.stringify(formData),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    console.log('success')
+                    resetRating()
+                },
+                error: function (errMsg) {
+                    console.log('error')
+                }
+            })
         }
 
         function insertUser(user, type) {
-            let card = $('.user' + type + '-card')
+            let card = $(`.user${type}-card`)
             card.find('.card-title').text(user.userName)
             card.find('.card-text').text(user.description)
             card.data('userId', user.id)
+        }
+
+        function getUsersByRating() {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/users/getByRating',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    const text = ['text-danger', 'text-warning', 'text-success', 'text-primary', 'text-info', 'text-secondary']
+                    data.forEach(function (item, i, data) {
+                        if (i <= 4) {
+                            addCard(text[i], item)
+                        } else {
+                            addCard(text[5], item)
+                        }
+                        console.log(data)
+                    })
+                },
+                error: function (errMsg) {
+                    console.log('random error')
+                }
+            })
+        }
+
+        function addCard(text, user) {
+            $('#bests').closest('.tab-pane').append('\n' +
+                '            <div class="card border-primary mb-3 top-user" style="max-width: 18rem;">\n' +
+                `                <div class="card-header">${user.rating}</div>\n` +
+                `                <div class="card-body ${text}">\n` +
+                `                    <h5 class="card-title">${user.userName}</h5>\n` +
+                `                    <p class="card-text">${user.description}</p>\n` +
+                '                </div>\n' +
+                '            </div>')
+        }
+
+        function resetRating() {
+            $('.top-user').remove()
+            getUsersByRating()
         }
     })

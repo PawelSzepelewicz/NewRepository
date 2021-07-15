@@ -10,4 +10,6 @@ public interface UsersService {
     void redefineRating(final User winner, final User loser);
 
     List<User> getUsersForComparison();
+
+    List<User> getTopUsersByRating();
 }

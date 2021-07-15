@@ -35,4 +35,9 @@ public class UsersController {
     public ResponseEntity<List<SelectedUsersDto>> getUsersForComparison() {
         return ResponseEntity.ok(mapper.mapAsList(service.getUsersForComparison(), SelectedUsersDto.class));
     }
+
+    @GetMapping("/getByRating")
+    public ResponseEntity<List<SelectedUsersDto>> getTopByRating() {
+        return ResponseEntity.ok(mapper.mapAsList(service.getTopUsersByRating(), SelectedUsersDto.class));
+    }
 }
