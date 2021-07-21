@@ -26,4 +26,6 @@ public class User extends AbstractEntity {
     @Size(min = 1, max = 1000, message = "{description.size}")
     private String description;
     private Integer rating = INITIAL_RATING;
+    @NotBlank(message = "{password.notempty}")
+    private String password;
 }

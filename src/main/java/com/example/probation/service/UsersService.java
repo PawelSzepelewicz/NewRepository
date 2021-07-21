@@ -12,4 +12,8 @@ public interface UsersService {
     List<User> getUsersForComparison();
 
     List<User> getTopUsersByRating();
+
+    Integer calculateWinnerRating(Integer currentRating);
+
+    Integer calculateLoserRating(Integer currentRating);
 }

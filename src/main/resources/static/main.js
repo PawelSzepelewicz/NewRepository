@@ -17,6 +17,7 @@ $(document).ready(
             const formData = {
                 userName: $('#userName').val(),
                 description: $('#description').val(),
+                password: $('#password').val()
             }
             $.ajax({
                 type: 'POST',
@@ -32,7 +33,7 @@ $(document).ready(
                 error: function (errMsg) {
                     errMsg.responseJSON.forEach(error => {
                         let field = '#' + error.field
-                        $(field).closest('.form-group').append(`<di class="invalid-feedback">${error.field} ${error.message}</div>`)
+                        $(field).closest('.form-group').append(`<div class="invalid-feedback">${error.field} ${error.message}</div>`)
                         $(field).addClass('is-invalid')
                         $(field).val('')
                     })
@@ -129,7 +130,7 @@ $(document).ready(
 
         function addCard(text, user) {
             $('#bests').closest('.tab-pane').append('\n' +
-                '            <div class="card border-primary mb-3 top-user" style="max-width: 18rem;">\n' +
+                '            <div class="card border-primary mb-3 top-user" style="max-width: 18rem">\n' +
                 `                <div class="card-header">${user.rating}</div>\n` +
                 `                <div class="card-body ${text}">\n` +
                 `                    <h5 class="card-title">${user.userName}</h5>\n` +

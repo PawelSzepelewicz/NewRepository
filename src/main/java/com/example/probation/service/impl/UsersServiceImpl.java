@@ -4,6 +4,7 @@ import com.example.probation.model.User;
 import com.example.probation.repository.UsersRepository;
 import com.example.probation.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,16 +15,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User saveNewUser(final User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return usersRepository.save(user);
     }
 
     @Override
     public void redefineRating(final User winner, final User loser) {
-        loser.setRating(loser.getRating() - 15);
-        winner.setRating(winner.getRating() + 15);
+        loser.setRating(calculateLoserRating(loser.getRating()));
+        winner.setRating(calculateWinnerRating(winner.getRating()));
         usersRepository.save(winner);
         usersRepository.save(loser);
     }
@@ -36,5 +39,15 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public List<User> getTopUsersByRating() {
         return usersRepository.findAllByRating();
+    }
+
+    @Override
+    public Integer calculateWinnerRating(Integer currentRating) {
+        return currentRating + 15;
+    }
+
+    @Override
+    public Integer calculateLoserRating(Integer currentRating) {
+        return currentRating - 15;
     }
 }
