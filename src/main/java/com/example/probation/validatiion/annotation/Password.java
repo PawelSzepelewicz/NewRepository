@@ -10,7 +10,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = PasswordValidator.class)
-
 public @interface Password {
     String message() default "{password.invalid}";
 
