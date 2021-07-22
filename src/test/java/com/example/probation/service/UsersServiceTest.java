@@ -3,17 +3,22 @@ package com.example.probation.service;
 import com.example.probation.repository.UsersRepository;
 import com.example.probation.service.impl.UsersServiceImpl;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class UsersServiceTest {
+    @Mock
+    private UsersRepository usersRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
-    UsersRepository usersRepository;
-    @InjectMocks
-    PasswordEncoder passwordEncoder;
-    UsersService service = new UsersServiceImpl(usersRepository, passwordEncoder);
+    private UsersServiceImpl service;
 
     @Test
     void calculateWinnerRating() {

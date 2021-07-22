@@ -38,7 +38,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public List<User> getTopUsersByRating() {
-        return usersRepository.findAllByRating();
+        return usersRepository.findAllByOrderByRatingDesc();
     }
 
     @Override

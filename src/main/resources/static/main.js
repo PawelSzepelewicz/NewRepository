@@ -60,12 +60,8 @@ $(document).ready(
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data)
                     insertUser(data[0], 'A')
                     insertUser(data[1], 'B')
-                },
-                error: function (errMsg) {
-                    console.log('random error')
                 }
             })
         }
@@ -89,11 +85,7 @@ $(document).ready(
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
-                    console.log('success')
                     resetRating()
-                },
-                error: function (errMsg) {
-                    console.log('error')
                 }
             })
         }
@@ -119,11 +111,7 @@ $(document).ready(
                         } else {
                             addCard(text[5], item)
                         }
-                        console.log(data)
                     })
-                },
-                error: function (errMsg) {
-                    console.log('random error')
                 }
             })
         }
