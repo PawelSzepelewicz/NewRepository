@@ -15,6 +15,9 @@
             <column name="description" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="rating" type="bigint">
                 <constraints nullable="false"/>
             </column>
