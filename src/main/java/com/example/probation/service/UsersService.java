@@ -16,4 +16,6 @@ public interface UsersService {
     Integer calculateWinnerRating(Integer currentRating);
 
     Integer calculateLoserRating(Integer currentRating);
+
+    User findByUserName(String username);
 }

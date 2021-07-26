@@ -1,57 +1,13 @@
 $(document).ready(
     function () {
+        getCurrentUser()
         getUsersByRating()
         getNextUsers()
-        $('#userForm').submit(function (event) {
-            event.preventDefault()
-            removeMessages()
-            userPost()
-        })
         $('.card-dtn').click(function (event) {
             let winnerId = $(this).closest('.card').data('userId')
             selectUser(winnerId)
             getNextUsers()
         })
-
-        function userPost() {
-            const formData = {
-                userName: $('#userName').val(),
-                description: $('#description').val(),
-                password: $('#password').val()
-            }
-            $.ajax({
-                type: 'POST',
-                url: 'http://localhost:8080/users',
-                data: JSON.stringify(formData),
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                success: function (data) {
-                    resetData()
-                    $('.form-message').text('User has been created successfully.')
-                    resetRating()
-                },
-                error: function (errMsg) {
-                    errMsg.responseJSON.forEach(error => {
-                        let field = '#' + error.field
-                        $(field).closest('.form-group').append(`<div class="invalid-feedback">${error.field} ${error.message}</div>`)
-                        $(field).addClass('is-invalid')
-                        $(field).val('')
-                    })
-                }
-            })
-        }
-
-        function resetData() {
-            $(':input', '#userForm').not(':button, :submit, :reset, :hidden').val('')
-                .removeAttr('checked')
-                .removeAttr('selected')
-        }
-
-        function removeMessages() {
-            $('.form-message').empty()
-            $('.invalid-feedback').remove()
-            $('.is-invalid').removeClass('is-invalid')
-        }
 
         function getNextUsers() {
             $.ajax({
@@ -92,7 +48,7 @@ $(document).ready(
 
         function insertUser(user, type) {
             let card = $(`.user${type}-card`)
-            card.find('.card-title').text(user.userName)
+            card.find('.card-title').text(user.username)
             card.find('.card-text').text(user.description)
             card.data('userId', user.id)
         }
@@ -121,7 +77,7 @@ $(document).ready(
                 '            <div class="card border-primary mb-3 top-user" style="max-width: 18rem">\n' +
                 `                <div class="card-header">${user.rating}</div>\n` +
                 `                <div class="card-body ${text}">\n` +
-                `                    <h5 class="card-title">${user.userName}</h5>\n` +
+                `                    <h5 class="card-title">${user.username}</h5>\n` +
                 `                    <p class="card-text">${user.description}</p>\n` +
                 '                </div>\n' +
                 '            </div>')
@@ -130,5 +86,20 @@ $(document).ready(
         function resetRating() {
             $('.top-user').remove()
             getUsersByRating()
+        }
+
+        function getCurrentUser() {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/users/current',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    $('#current').closest('.current-user').text(data.username)
+                },
+                error: function (error) {
+                    $('#current').closest('.current-user').text("not authorized")
+                }
+            })
         }
     })

@@ -1,5 +1,6 @@
 package com.example.probation.controller.advice;
 
+import com.example.probation.exception.ForbiddenException;
 import com.example.probation.model.ErrorsWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,5 +34,11 @@ public class WebRestControllerAdvice extends ResponseEntityExceptionHandler {
                 new ErrorsWrapper(cv.getField(), cv.getDefaultMessage())).collect(Collectors.toList());
 
         return new ResponseEntity<>(errorsWrappers, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Object> handleUsernameNotFoundException(final ForbiddenException fe) {
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }

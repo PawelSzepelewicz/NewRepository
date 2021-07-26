@@ -4,6 +4,13 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <include file="changelog/01-users.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/03-add-roles.xml" relativeToChangelogFile="true"/>
+    <changeSet id="2021-07-22" author="PawelSzepelewicz">
+        <sql dbms="mysql"
+             endDelimiter=";"
+             splitStatements="true"
+             stripComments="true">
+            Insert into ROLES (ID,ROLE) value (1, "USER");
+            Insert into ROLES (ID,ROLE) value (2, "ADMIN");
+        </sql>
+    </changeSet>
 </databaseChangeLog>

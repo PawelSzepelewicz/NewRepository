@@ -9,4 +9,9 @@ public class HomeController {
     public String home() {
         return "home";
     }
+
+    @GetMapping("/creationForm")
+    public String createUser() {
+        return "creationForm";
+    }
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class SelectedUsersDto {
     private Long id;
-    private String userName;
+    private String username;
     private String description;
     private Integer rating;
 }

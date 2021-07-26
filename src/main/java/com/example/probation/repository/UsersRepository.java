@@ -15,4 +15,6 @@ public interface UsersRepository extends JpaRepository<User, Long> {
     List<User> getRandomUsers();
 
     List<User> findAllByOrderByRatingDesc();
+
+    User findByUsername(String username);
 }
