@@ -1,5 +1,6 @@
 package com.example.probation.service.impl;
 
+import com.example.probation.exception.ForbiddenException;
 import com.example.probation.model.User;
 import com.example.probation.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +20,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = usersRepository.findByUsername(username);
 
-        return optionalUser.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return usersRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public String getCurrentUsername() throws NullPointerException {
+    public String getCurrentUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (auth.equals(null)) {
-            throw new NullPointerException();
-        } else if (auth.getName().equals("anonymousUser")) {
-            return null;
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            throw new ForbiddenException();
         }
 
         return auth.getName();

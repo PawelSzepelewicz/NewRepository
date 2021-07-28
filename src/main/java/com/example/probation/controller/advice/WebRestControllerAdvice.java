@@ -41,10 +41,4 @@ public class WebRestControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleForbiddenException(final ForbiddenException fe) {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
-
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<Object> handleNullPointerException(final NullPointerException npe) {
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-    }
 }

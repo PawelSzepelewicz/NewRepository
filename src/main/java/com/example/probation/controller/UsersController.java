@@ -47,10 +47,13 @@ public class UsersController {
         if (username == null) {
             throw new ForbiddenException();
         }
+
         Optional<User> user = service.findByUserName(username);
 
         if (user.isPresent()) {
             return ResponseEntity.ok(mapper.map(user.get(), UserDto.class));
-        } else throw new ForbiddenException();
+        } else {
+            throw new ForbiddenException();
+        }
     }
 }

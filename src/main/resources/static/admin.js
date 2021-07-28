@@ -6,7 +6,7 @@ $(document).ready(
             userPost()
         })
         $('#home').click(function (event) {
-            window.location = "/home"
+            window.location = '/home'
         })
 
         function userPost() {
