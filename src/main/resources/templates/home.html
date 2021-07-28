@@ -7,12 +7,11 @@
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+
 </head>
 <body>
 <div class="container" id="container">
     <ul class="nav nav-tabs">
-
-
         <li class="nav-item">
             <a aria-controls="compare" aria-selected="false" class="nav-link" data-toggle="tab" href="#compare"
                id="compare-tab"
@@ -24,13 +23,14 @@
                role="tab">Best users</a>
         </li>
         <hr>
-        <li>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
-                 viewBox="0 0 16 16">
-                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-            </svg>
+        <li style="margin:7px 3px 0px 0px">
+            <i class="far fa-user"></i>
         </li>
-        <li class="alert-light current-user" id="current" role="alert">
+        <li class="alert-light current-user" id="current" role="alert" style="margin:8px 0px 0px 0px">
+        </li>
+        <li><a class="btn btn-info login btn-sm" id="login-logout" style="margin:5px 0px 0px 15px">Login</a></li>
+       <li class="text-left" id="createNew">
+           <a class="btn btn-info creation btn-sm" hidden id="creation" style="margin:5px 0px 0px 15px">Create new user</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -72,5 +72,6 @@
         crossorigin="anonymous"></script>
 <script src="main.js"></script>
 <script src="main.css"></script>
+<script src="https://kit.fontawesome.com/ff81d4d106.js"></script>
 </body>
 </html>

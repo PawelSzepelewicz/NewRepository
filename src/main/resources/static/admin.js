@@ -5,6 +5,9 @@ $(document).ready(
             removeMessages()
             userPost()
         })
+        $('#home').click(function (event) {
+            window.location = "/home"
+        })
 
         function userPost() {
             const formData = {

@@ -9,6 +9,18 @@ $(document).ready(
             getNextUsers()
         })
 
+        $('#login-logout').click(function (event) {
+            let isAuth = $(this).closest('.login').data('isAuth')
+            if (isAuth !== 'true') {
+                window.location = "/login"
+            } else {
+                window.location = "/logout"
+            }
+        })
+        $('#creation').click(function (event) {
+            window.location = "/creationForm"
+        })
+
         function getNextUsers() {
             $.ajax({
                 type: 'GET',
@@ -95,10 +107,17 @@ $(document).ready(
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
+                    if (data.roles.some(r => r.role === "ADMIN")) {
+                        $('#creation').closest('.creation').removeAttr('hidden')
+                    }
+                    $('.current-user').addClass('text-primary')
                     $('#current').closest('.current-user').text(data.username)
+                    $('#login-logout').text('Log out')
+                    let button = $(`.login`)
+                    button.data('isAuth', 'true')
                 },
                 error: function (error) {
-                    $('#current').closest('.current-user').text("not authorized")
+                    $('#current').closest('.current-user').text("Not authorized")
                 }
             })
         }

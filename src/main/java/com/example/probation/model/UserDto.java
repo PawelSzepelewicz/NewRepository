@@ -13,5 +13,5 @@ public class UserDto {
     private String username;
     private String description;
     private Integer rating;
-    Set<Role> roles;
+    Set<RoleDto> roles;
 }

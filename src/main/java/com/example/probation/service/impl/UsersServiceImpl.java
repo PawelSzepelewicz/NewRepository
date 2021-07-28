@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Transactional
@@ -25,7 +26,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public User saveNewUser(final User user) {
         Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.getRoleById(1L));
+        roles.add(roleRepository.getRoleByRole("USER"));
         user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return usersRepository.save(user);
@@ -60,7 +61,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public User findByUserName(String username) {
+    public Optional<User> findByUserName(String username) {
         return usersRepository.findByUsername(username);
     }
 }

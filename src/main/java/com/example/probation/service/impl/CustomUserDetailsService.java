@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -17,17 +19,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = usersRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("Unknown user: " + username);
-        }
+        Optional<User> optionalUser = usersRepository.findByUsername(username);
 
-        return user;
+        return optionalUser.orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public String getCurrentUsername() {
+    public String getCurrentUsername() throws NullPointerException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.getName().equals("anonymousUser") || auth.equals(null)) {
+
+        if (auth.equals(null)) {
+            throw new NullPointerException();
+        } else if (auth.getName().equals("anonymousUser")) {
             return null;
         }
 

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -40,12 +41,16 @@ public class UsersController {
     }
 
     @GetMapping("/current")
-    public ResponseEntity<UserDto> getCurrentUser() throws ForbiddenException {
+    public ResponseEntity<UserDto> getCurrentUser() {
         String username = userDetailsService.getCurrentUsername();
-        if(username == null) {
+
+        if (username == null) {
             throw new ForbiddenException();
         }
+        Optional<User> user = service.findByUserName(username);
 
-        return ResponseEntity.ok(mapper.map(service.findByUserName(username), UserDto.class));
+        if (user.isPresent()) {
+            return ResponseEntity.ok(mapper.map(user.get(), UserDto.class));
+        } else throw new ForbiddenException();
     }
 }
