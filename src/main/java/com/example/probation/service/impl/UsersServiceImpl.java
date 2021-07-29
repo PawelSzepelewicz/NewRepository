@@ -1,6 +1,8 @@
 package com.example.probation.service.impl;
 
+import com.example.probation.model.Role;
 import com.example.probation.model.User;
+import com.example.probation.repository.RoleRepository;
 import com.example.probation.repository.UsersRepository;
 import com.example.probation.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Transactional
 @Service
@@ -16,9 +21,13 @@ import java.util.List;
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public User saveNewUser(final User user) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.getRoleByRole("USER"));
+        user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return usersRepository.save(user);
     }
@@ -49,5 +58,10 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Integer calculateLoserRating(Integer currentRating) {
         return currentRating - 15;
+    }
+
+    @Override
+    public Optional<User> findByUserName(String username) {
+        return usersRepository.findByUsername(username);
     }
 }

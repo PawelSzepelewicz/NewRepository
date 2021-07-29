@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 public class CreateUserDto {
     @NotBlank(message = "{name.notempty}")
     @Size(min = 3, max = 32, message = "{name.size}")
-    private String userName;
+    private String username;
     @NotBlank(message = "{description.notempty}")
     @Size(min = 1, max = 1000, message = "{description.size}")
     private String description;

@@ -1,14 +1,19 @@
 package com.example.probation.controller;
 
-import com.example.probation.model.*;
+import com.example.probation.exception.ForbiddenException;
+import com.example.probation.model.SelectedUsersDto;
+import com.example.probation.model.SuccessMessage;
+import com.example.probation.model.User;
+import com.example.probation.model.UserDto;
 import com.example.probation.service.UsersService;
+import com.example.probation.service.impl.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -16,13 +21,7 @@ import java.util.List;
 public class UsersController {
     private final MapperFacade mapper;
     private final UsersService service;
-
-    @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody @Valid final CreateUserDto newUser) {
-        final var user = mapper.map(newUser, User.class);
-
-        return ResponseEntity.ok(mapper.map(service.saveNewUser(user), UserDto.class));
-    }
+    private final CustomUserDetailsService userDetailsService;
 
     @PostMapping("/{winnerId}/win/{loserId}")
     public ResponseEntity<SuccessMessage> changeRating(@PathVariable("winnerId") final User winner, @PathVariable("loserId") final User loser) {
@@ -39,5 +38,22 @@ public class UsersController {
     @GetMapping("/getByRating")
     public ResponseEntity<List<SelectedUsersDto>> getTopByRating() {
         return ResponseEntity.ok(mapper.mapAsList(service.getTopUsersByRating(), SelectedUsersDto.class));
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<UserDto> getCurrentUser() {
+        String username = userDetailsService.getCurrentUsername();
+
+        if (username == null) {
+            throw new ForbiddenException();
+        }
+
+        Optional<User> user = service.findByUserName(username);
+
+        if (user.isPresent()) {
+            return ResponseEntity.ok(mapper.map(user.get(), UserDto.class));
+        } else {
+            throw new ForbiddenException();
+        }
     }
 }

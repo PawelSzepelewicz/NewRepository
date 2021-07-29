@@ -3,6 +3,7 @@ package com.example.probation.service;
 import com.example.probation.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UsersService {
     User saveNewUser(final User newUser);
@@ -16,4 +17,6 @@ public interface UsersService {
     Integer calculateWinnerRating(Integer currentRating);
 
     Integer calculateLoserRating(Integer currentRating);
+
+    Optional<User> findByUserName(String username);
 }
