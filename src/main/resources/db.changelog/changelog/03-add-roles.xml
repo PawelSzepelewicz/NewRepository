@@ -13,4 +13,13 @@
             Insert into ROLES (ID,ROLE) value (2, "ADMIN");
         </sql>
     </changeSet>
+
+    <changeSet id="2021-08-02" author="PawelSzepelewicz">
+        <sql dbms="mysql"
+             endDelimiter=";"
+             splitStatements="true"
+             stripComments="true">
+            Insert into USER_ROLES (USER_ID,ROLE_ID) value (1, 2);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

@@ -1,6 +1,6 @@
 package com.example.probation.controller.advice;
 
-import com.example.probation.exception.ForbiddenException;
+import com.example.probation.exception.*;
 import com.example.probation.model.ErrorsWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,6 +39,40 @@ public class WebRestControllerAdvice extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<Object> handleForbiddenException(final ForbiddenException fe) {
+        fe.getMessage();
+
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(NoUserForbiddenException.class)
+    public ResponseEntity<Object> handleNoUserForbiddenException(final NoUserForbiddenException nufe) {
+        nufe.getMessage();
+
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(TimeHasExpiredException.class)
+    public ResponseEntity<Object> handleTimeHsExpiredException(final TimeHasExpiredException thee) {
+        thee.getMessage();
+
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<Object> handleTokenNotFoundException(final TokenNotFoundException tnfe) {
+        tnfe.getMessage();
+
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(UserNotFoundByTokenException.class)
+    public ResponseEntity<Object> handleUserNotFoundByTokenException(final UserNotFoundByTokenException unte) {
+        unte.getMessage();
+
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }

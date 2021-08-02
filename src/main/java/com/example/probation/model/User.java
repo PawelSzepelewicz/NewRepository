@@ -19,15 +19,19 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends AbstractEntity implements UserDetails {
     private static final Integer INITIAL_RATING = 2500;
+    private static final boolean ENABLED = false;
     @Column(name = "user_name")
     private String username;
     private String description;
+    private String email;
     private Integer rating = INITIAL_RATING;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+    @Column(name = "enabled")
+    private boolean enabled = ENABLED;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -56,6 +60,6 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 }

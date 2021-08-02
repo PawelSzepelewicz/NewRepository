@@ -1,9 +1,11 @@
 package com.example.probation.validatiion.validator;
 
+import com.example.probation.validatiion.annotation.Password;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class PasswordValidator implements ConstraintValidator<com.example.probation.validatiion.annotation.Password, String> {
+public class PasswordValidator implements ConstraintValidator<Password, String> {
     @Override
     public void initialize(com.example.probation.validatiion.annotation.Password constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);

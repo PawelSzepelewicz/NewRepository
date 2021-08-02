@@ -13,5 +13,6 @@ public class UserDto {
     private String username;
     private String description;
     private Integer rating;
+    private String email;
     Set<RoleDto> roles;
 }
