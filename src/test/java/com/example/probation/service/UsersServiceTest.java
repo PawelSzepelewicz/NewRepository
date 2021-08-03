@@ -1,7 +1,7 @@
 package com.example.probation.service;
 
-import com.example.probation.model.Role;
-import com.example.probation.model.User;
+import com.example.probation.core.entity.Role;
+import com.example.probation.core.entity.User;
 import com.example.probation.repository.UsersRepository;
 import com.example.probation.service.impl.UsersServiceImpl;
 import org.junit.jupiter.api.Test;

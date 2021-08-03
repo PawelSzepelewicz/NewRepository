@@ -1,5 +1,6 @@
-package com.example.probation.model;
+package com.example.probation.core.entity;
 
+import com.example.probation.core.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -17,7 +17,11 @@ public class NameValidator implements ConstraintValidator<UniqueUsername, String
     }
 
     @Override
-    public boolean isValid(String email, ConstraintValidatorContext context) {
-        return !usersService.checkEmailExistence(email);
+    public boolean isValid(String name, ConstraintValidatorContext context) {
+        if (name == null) {
+            return false;
+        }
+
+        return !usersService.checkUsernameExistence(name);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.probation.service;
 
-import com.example.probation.model.User;
+import com.example.probation.core.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +19,6 @@ public interface UsersService {
     Integer calculateLoserRating(Integer currentRating);
 
     Optional<User> findByUserName(String username);
-
-    void createVerificationToken(User user, String token);
 
     Optional<User> getUserByToken(String token);
 

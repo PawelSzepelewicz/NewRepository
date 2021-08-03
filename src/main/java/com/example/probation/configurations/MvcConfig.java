@@ -18,10 +18,6 @@ import java.util.Properties;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-    @Value("${spring.mail.username}")
-    private String username;
-    @Value("${spring.mail.password}")
-    private String password;
 
     @Bean
     public MessageSource messageSource() {
@@ -46,21 +42,5 @@ public class MvcConfig implements WebMvcConfigurer {
         sessionLocaleResolver.setDefaultLocale(new Locale("en", "EN"));
 
         return sessionLocaleResolver;
-    }
-
-    @Bean
-    public JavaMailSender getJavaMailSender() {
-        var mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-        mailSender.setUsername(username);
-        mailSender.setPassword(password);
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
-
-        return mailSender;
     }
 }

@@ -1,6 +1,6 @@
 package com.example.probation.service.impl;
 
-import com.example.probation.model.Role;
+import com.example.probation.core.entity.Role;
 import com.example.probation.repository.RoleRepository;
 import com.example.probation.service.RoleService;
 import lombok.RequiredArgsConstructor;

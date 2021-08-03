@@ -67,7 +67,7 @@ $(document).ready(
         function getUsersByRating() {
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/users',
+                url: 'http://localhost:8080/users/top',
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {

@@ -1,11 +1,10 @@
 package com.example.probation.controller;
 
-import com.example.probation.model.SelectedUsersDto;
-import com.example.probation.model.SuccessMessage;
-import com.example.probation.model.User;
-import com.example.probation.model.UserDto;
+import com.example.probation.core.dto.SelectedUsersDto;
+import com.example.probation.core.dto.SuccessMessage;
+import com.example.probation.core.entity.User;
+import com.example.probation.core.dto.UserDto;
 import com.example.probation.service.UsersService;
-import com.example.probation.service.impl.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public class UsersController {
         return ResponseEntity.ok(mapper.mapAsList(service.getUsersForComparison(), SelectedUsersDto.class));
     }
 
-    @GetMapping
+    @GetMapping("/top")
     public ResponseEntity<List<SelectedUsersDto>> getTopByRating() {
         return ResponseEntity.ok(mapper.mapAsList(service.getTopUsersByRating(), SelectedUsersDto.class));
     }

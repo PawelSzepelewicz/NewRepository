@@ -20,7 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         var homeUrl = "/home";
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/account/**").permitAll()
+                .antMatchers("/accounts/**").permitAll()
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/users/{winnerId}/win/{loserId}").hasAnyAuthority("ADMIN", "USER")
                 .antMatchers("/users/getByRating").permitAll()

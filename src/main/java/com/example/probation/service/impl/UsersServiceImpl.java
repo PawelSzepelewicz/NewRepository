@@ -1,9 +1,9 @@
 package com.example.probation.service.impl;
 
 import com.example.probation.exception.*;
-import com.example.probation.model.Role;
-import com.example.probation.model.User;
-import com.example.probation.model.VerificationToken;
+import com.example.probation.core.entity.Role;
+import com.example.probation.core.entity.User;
+import com.example.probation.core.entity.VerificationToken;
 import com.example.probation.repository.UsersRepository;
 import com.example.probation.service.RoleService;
 import com.example.probation.service.TokenService;
@@ -47,7 +47,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void redefineRating(final User winner, final User loser) {
-        List<User> players = new ArrayList<>();
+        final List<User> players = new ArrayList<>();
         loser.setRating(calculateLoserRating(loser.getRating()));
         winner.setRating(calculateWinnerRating(winner.getRating()));
         players.add(winner);
@@ -85,25 +85,19 @@ public class UsersServiceImpl implements UsersService {
         String username = detailsService.getCurrentUsername();
 
         if (username == null) {
-            throw new NoUserForbiddenException();
+            throw new NoSuchUserException();
         }
 
         return findByUserName(username).orElseThrow(ForbiddenException::new);
     }
 
     @Override
-    public void createVerificationToken(User user, String token) {
-        var myToken = new VerificationToken(token, user);
-        tokenService.saveNewToken(myToken);
-    }
-
-    @Override
-    public Optional<User> getUserByToken(String token) {
+    public Optional<User> getUserByToken(final String token) {
         return Optional.of(tokenService.findByToken(token).orElseThrow(TokenNotFoundException::new).getUser());
     }
 
     @Override
-    public User saveRegisteredUser(String token) {
+    public User saveRegisteredUser(final String token) {
         var verificationToken = tokenService.findByToken(token).orElseThrow(UserNotFoundByTokenException::new);
         var user = tokenService.getUserByToken(token).orElseThrow();
         var cal = Calendar.getInstance();

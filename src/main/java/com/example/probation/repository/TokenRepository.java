@@ -1,8 +1,7 @@
 package com.example.probation.repository;
 
 
-import com.example.probation.model.User;
-import com.example.probation.model.VerificationToken;
+import com.example.probation.core.entity.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

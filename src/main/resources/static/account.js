@@ -21,7 +21,7 @@ $(document).ready(
             }
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8080/account',
+                url: 'http://localhost:8080/accounts',
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
@@ -57,7 +57,7 @@ $(document).ready(
             const searchParams = new URLSearchParams(paramsString);
             $.ajax({
                 type: 'GET',
-                url: `http://localhost:8080/account?${searchParams}`,
+                url: `http://localhost:8080/accounts?${searchParams}`,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
