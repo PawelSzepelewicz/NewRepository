@@ -29,8 +29,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User registerNewUser(final User user) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleService.getRoleByRole("USER"));
+        Set<Role> roles = Set.of(roleService.getRoleByRole("USER"));
         user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));

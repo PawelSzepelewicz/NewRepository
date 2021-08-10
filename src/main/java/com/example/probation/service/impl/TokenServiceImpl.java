@@ -44,13 +44,13 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public void confirmRegistration(User user) {
-        var token = UUID.randomUUID().toString();
+        final var token = UUID.randomUUID().toString();
         saveNewToken(new VerificationToken(token, user));
-        String recipientAddress = user.getEmail();
-        var subject = "Registration Confirmation";
-        String confirmationUrl = host + "/confirmation?token=" + token;
-        String message = messages.getMessage("message.registrationSuccess", null, LocaleContextHolder.getLocale());
-        var email = new SimpleMailMessage();
+        final String recipientAddress = user.getEmail();
+        final var subject = "Registration Confirmation";
+        final String confirmationUrl = host + "/confirmation?token=" + token;
+        final String message = messages.getMessage("message.registrationSuccess", null, LocaleContextHolder.getLocale());
+        final var email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(message + "\r\n" + confirmationUrl);

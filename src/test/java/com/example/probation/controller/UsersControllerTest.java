@@ -1,45 +1,48 @@
 package com.example.probation.controller;
 
-import com.example.probation.core.entity.User;
+import com.example.probation.core.entity.Role;
 import com.example.probation.repository.UsersRepository;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
-@Sql({"/user-controller.sql"})
+@Sql({"/init.sql"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UsersControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    UsersRepository repository;
+    private UsersRepository repository;
     @Autowired
-    WebApplicationContext context;
+    private WebApplicationContext context;
+    @Autowired
+    private UserDetailsService detailsService;
 
     @BeforeEach
     public void setup() {
@@ -50,17 +53,14 @@ class UsersControllerTest {
     }
 
     @Test
+    @WithUserDetails("Admin")
     void getCurrentUser() throws Exception {
-        User principal = repository.findByUsername("Admin").get();
-        Authentication auth = new UsernamePasswordAuthenticationToken(principal, "password",
-                principal.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        mockMvc.perform(get("http://localhost:8080/users/current")
-                .with(authentication(auth)))
+        final var roles = Set.of(new Role("ADMIN"), new Role("USER"));
+        mockMvc.perform(get("http://localhost:8080/users/current"))
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.username").value("Admin"))
                 .andExpect(authenticated())
-                .andExpect(authenticated().withAuthorities(principal.getAuthorities()));
+                .andExpect(authenticated().withAuthorities(roles));
     }
 
     @Test
@@ -73,39 +73,31 @@ class UsersControllerTest {
                 .andExpect(jsonPath("$[*].username").hasJsonPath())
                 .andExpect(jsonPath("$[*].description").hasJsonPath())
                 .andExpect(jsonPath("$[*].password").doesNotHaveJsonPath())
-                .andExpect(jsonPath("$[*].rating").hasJsonPath()).andReturn();
+                .andExpect(jsonPath("$[*].rating").hasJsonPath());
     }
 
     @Test
     void getTopByRating() throws Exception {
-        MvcResult result = mockMvc.perform(get("http://localhost:8080/users/top"))
+        final MvcResult result = mockMvc.perform(get("http://localhost:8080/users/top"))
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.*").isArray()).andReturn();
-        String json = result.getResponse().getContentAsString();
-        Integer args = JsonPath.parse(json).read("$.length()");
-
-        for (int a = 0; a < args - 1; a++) {
-            int b = a + 1;
-            Integer userA = JsonPath.parse(json).read("$[" + a + "].rating");
-            Integer userB = JsonPath.parse(json).read("$[" + b + "].rating");
-            assertTrue(userA > userB);
-        }
+        final String json = result.getResponse().getContentAsString();
+        final List<Integer> ratings = (List<Integer>) JsonPath.parse(json).read("$.*.rating", List.class);
+        assertEquals(ratings.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList()), ratings);
     }
 
     @Test
+    @WithUserDetails("Admin")
     void changeRating() throws Exception {
-        User principal = repository.findByUsername("Admin").get();
-        Authentication auth = new UsernamePasswordAuthenticationToken(principal, "password",
-                principal.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        Integer beforeWinnerRating = repository.findById(1L).get().getRating();
-        Integer beforeLoserRating = repository.findById(2L).get().getRating();
-        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:8080/users/{winnerId}/win/{loserId}", 1, 2)
-                .header("Content-Type", "application/json")
-                .with(authentication(auth)))
+        final Integer beforeWinnerRating = repository.findById(1L).get().getRating();
+        final Integer beforeLoserRating = repository.findById(2L).get().getRating();
+        mockMvc.perform(post("http://localhost:8080/users/{winnerId}/win/{loserId}", 1, 2)
+                .header("Content-Type", "application/json"))
                 .andExpect(status().is(HttpStatus.OK.value()));
-        Integer afterWinnerRating = repository.findById(1L).get().getRating();
-        Integer afterLoserRating = repository.findById(2L).get().getRating();
-        assertTrue(beforeWinnerRating + 15 == afterWinnerRating && beforeLoserRating - 15 == afterLoserRating);
+        final Integer afterWinnerRating = repository.findById(1L).get().getRating();
+        final Integer afterLoserRating = repository.findById(2L).get().getRating();
+        final Integer addition = 15;
+        assertEquals(beforeWinnerRating + addition, (int) afterWinnerRating);
+        assertEquals(beforeLoserRating - addition, (int) afterLoserRating);
     }
 }

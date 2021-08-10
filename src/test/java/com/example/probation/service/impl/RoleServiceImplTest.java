@@ -21,10 +21,10 @@ class RoleServiceImplTest {
 
     @Test
     void getROleByRole() {
-        Role role = new Role();
-        String newRole = "USER";
+        final Role role = new Role();
+        final String newRole = "USER";
         role.setRole(newRole);
-        String userRole = "USER";
+        final String userRole = "USER";
         Mockito.when(repository.getRoleByRole(any())).thenReturn(role);
         assertEquals(service.getRoleByRole(userRole).getRole(), role.getRole());
     }

@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of="role")
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
