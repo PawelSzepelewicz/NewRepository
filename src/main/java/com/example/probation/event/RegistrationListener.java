@@ -16,6 +16,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     public void confirmRegistration(OnRegistrationCompleteEvent event) {
-        tokenService.confirmRegistration(event);
+        tokenService.confirmRegistration(event.getUser());
     }
 }

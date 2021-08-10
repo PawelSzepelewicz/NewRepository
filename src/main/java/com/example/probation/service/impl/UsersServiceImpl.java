@@ -1,14 +1,15 @@
 package com.example.probation.service.impl;
 
-import com.example.probation.exception.*;
 import com.example.probation.core.entity.Role;
 import com.example.probation.core.entity.User;
-import com.example.probation.core.entity.VerificationToken;
+import com.example.probation.event.OnRegistrationCompleteEvent;
+import com.example.probation.exception.*;
 import com.example.probation.repository.UsersRepository;
 import com.example.probation.service.RoleService;
 import com.example.probation.service.TokenService;
 import com.example.probation.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,15 +25,16 @@ public class UsersServiceImpl implements UsersService {
     private final RoleService roleService;
     private final TokenService tokenService;
     private final CustomUserDetailsService detailsService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public User registerNewUser(final User user) {
-            Set<Role> roles = new HashSet<>();
-            roles.add(roleService.getRoleByRole("USER"));
-            user.setRoles(roles);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-            return usersRepository.save(user);
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleService.getRoleByRole("USER"));
+        user.setRoles(roles);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
+        return usersRepository.save(user);
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.example.probation.controller;
 
 import com.example.probation.core.dto.SelectedUsersDto;
 import com.example.probation.core.dto.SuccessMessage;
-import com.example.probation.core.entity.User;
 import com.example.probation.core.dto.UserDto;
+import com.example.probation.core.entity.User;
 import com.example.probation.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;

@@ -4,22 +4,13 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet id="2021-07-22" author="PawelSzepelewicz">
+    <changeSet id="2021-08-09" author="PawelSzepelewicz">
         <sql dbms="mysql"
              endDelimiter=";"
              splitStatements="true"
              stripComments="true">
             Insert into ROLES (ID,ROLE) value (1, "USER");
             Insert into ROLES (ID,ROLE) value (2, "ADMIN");
-        </sql>
-    </changeSet>
-
-    <changeSet id="2021-08-02" author="PawelSzepelewicz">
-        <sql dbms="mysql"
-             endDelimiter=";"
-             splitStatements="true"
-             stripComments="true">
-            Insert into USER_ROLES (USER_ID,ROLE_ID) value (1, 2);
         </sql>
     </changeSet>
 </databaseChangeLog>
