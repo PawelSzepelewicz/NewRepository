@@ -1,4 +1,4 @@
-package com.example.probation.model;
+package com.example.probation.core.entity;
 
 import lombok.Data;
 

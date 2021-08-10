@@ -4,6 +4,7 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
     <changeSet id="2021-07-05" author="PawelSzepelewicz">
         <createTable tableName="users">
             <column name="id" type="bigint" autoIncrement="true">
@@ -15,13 +16,24 @@
             <column name="description" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="password" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
             <column name="rating" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="2021-08-01" author="PawelSzepelewicz">
+        <addColumn tableName="users">
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
 
         <createTable tableName="roles">
             <column name="id" type="bigint" autoIncrement="true">
@@ -41,6 +53,27 @@
             </column>
         </createTable>
 
+        <createTable tableName="verification_token">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiry_date" type="datetime(3)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="user_token">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
         <addForeignKeyConstraint baseTableName="user_roles"
                                  baseColumnNames="user_id"
                                  constraintName="user_fkey"
@@ -53,5 +86,16 @@
                                  referencedTableName="roles"
                                  referencedColumnNames="id"/>
 
+        <addForeignKeyConstraint baseTableName="user_token"
+                                 baseColumnNames="user_id"
+                                 constraintName="user_user_token_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="user_token"
+                                 baseColumnNames="token_id"
+                                 constraintName="token_user_token_fkey"
+                                 referencedTableName="verification_token"
+                                 referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

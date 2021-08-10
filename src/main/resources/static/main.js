@@ -8,7 +8,6 @@ $(document).ready(
             selectUser(winnerId)
             getNextUsers()
         })
-
         $('#login-logout').click(function (event) {
             let isAuth = $(this).closest('.login').data('isAuth')
             if (isAuth !== 'true') {
@@ -18,7 +17,7 @@ $(document).ready(
             }
         })
         $('#creation').click(function (event) {
-            window.location = '/creationForm'
+            window.location = '/registration'
         })
 
         function getNextUsers() {
@@ -68,7 +67,7 @@ $(document).ready(
         function getUsersByRating() {
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/users/getByRating',
+                url: 'http://localhost:8080/users/top',
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {

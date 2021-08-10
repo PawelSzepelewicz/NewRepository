@@ -1,7 +1,7 @@
 package com.example.probation.controller.advice;
 
-import com.example.probation.exception.ForbiddenException;
-import com.example.probation.model.ErrorsWrapper;
+import com.example.probation.exception.*;
+import com.example.probation.core.dto.ErrorsWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,41 @@ public class WebRestControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<Object> handleForbiddenException(final ForbiddenException fe) {
+    public ResponseEntity<Object> handleForbiddenException(final ForbiddenException ex) {
+        ex.getMessage();
+
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(NoSuchUserException.class)
+    public ResponseEntity<Object> handleNoSuchUserException(final NoSuchUserException ex) {
+        ex.getMessage();
+
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    @ExceptionHandler(TimeHasExpiredException.class)
+    public ResponseEntity<Object> handleTimeHasExpiredException(final TimeHasExpiredException ex) {
+        ex.getMessage();
+
+        return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<Object> handleTokenNotFoundException(final TokenNotFoundException ex) {
+        ex.getMessage();
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundByTokenException.class)
+    public ResponseEntity<Object> handleUserNotFoundByTokenException(final UserNotFoundByTokenException ex) {
+        ex.getMessage();
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

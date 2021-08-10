@@ -14,9 +14,11 @@ import java.util.Locale;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
+
     @Bean
     public MessageSource messageSource() {
         final var messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages");
         messageSource.setDefaultEncoding("UTF-8");
 
         return messageSource;

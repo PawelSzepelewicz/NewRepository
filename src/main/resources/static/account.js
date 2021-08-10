@@ -8,16 +8,20 @@ $(document).ready(
         $('#home').click(function (event) {
             window.location = '/home'
         })
+        $('#confirm').click(function (event) {
+            confirmRegistration()
+        })
 
         function userPost() {
             const formData = {
                 username: $('#username').val(),
                 description: $('#description').val(),
-                password: $('#password').val()
+                password: $('#password').val(),
+                email: $('#email').val()
             }
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8080/admin',
+                url: 'http://localhost:8080/accounts',
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
@@ -46,5 +50,19 @@ $(document).ready(
             $('.form-message').empty()
             $('.invalid-feedback').remove()
             $('.is-invalid').removeClass('is-invalid')
+        }
+
+        function confirmRegistration() {
+            const paramsString = document.location.search;
+            const searchParams = new URLSearchParams(paramsString);
+            $.ajax({
+                type: 'GET',
+                url: `http://localhost:8080/accounts?${searchParams}`,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    window.location = 'http://localhost:8080/login'
+                }
+            })
         }
     })
