@@ -43,7 +43,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void confirmRegistration(User user) {
+    public void confirmRegistration(final User user) {
         final var token = UUID.randomUUID().toString();
         saveNewToken(new VerificationToken(token, user));
         final String recipientAddress = user.getEmail();

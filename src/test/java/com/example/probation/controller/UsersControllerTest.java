@@ -2,6 +2,7 @@ package com.example.probation.controller;
 
 import com.example.probation.core.entity.Role;
 import com.example.probation.repository.UsersRepository;
+import com.example.probation.service.impl.UsersServiceImpl;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -96,7 +96,7 @@ class UsersControllerTest {
                 .andExpect(status().is(HttpStatus.OK.value()));
         final Integer afterWinnerRating = repository.findById(1L).get().getRating();
         final Integer afterLoserRating = repository.findById(2L).get().getRating();
-        final Integer addition = 15;
+        final Integer addition = UsersServiceImpl.ADDITION;
         assertEquals(beforeWinnerRating + addition, (int) afterWinnerRating);
         assertEquals(beforeLoserRating - addition, (int) afterLoserRating);
     }

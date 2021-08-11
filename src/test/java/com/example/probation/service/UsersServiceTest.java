@@ -44,10 +44,7 @@ class UsersServiceTest {
     private UsersServiceImpl service;
 
     public Set<Role> getUsersRoles() {
-        final Set<Role> roles = new HashSet<>();
-        final Role role = new Role("USER");
-        roles.add(role);
-        return roles;
+        return Set.of(new Role("USER"));
     }
 
     @Test
@@ -101,7 +98,7 @@ class UsersServiceTest {
         final String token = "902a8cf0-63a7-444f-a424-8960907e7een";
         final String wrongToken = "802a8cf0-63a7-444f-a424-8960907e7een";
         final Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY, +2);
+        calendar.add(Calendar.HOUR_OF_DAY, 2);
         final Optional<VerificationToken> verificationToken = Optional.of(new VerificationToken(token, user, calendar.getTime()));
         Mockito.when(tokenService.findByToken(token)).thenReturn(verificationToken);
         Mockito.when(tokenService.getUserByToken(token)).thenReturn(Optional.of(user));
@@ -146,7 +143,7 @@ class UsersServiceTest {
 
     @Test
     void findByUsername() {
-        Optional<User> user = Optional.of(new User("User", "Description",
+        final Optional<User> user = Optional.of(new User("User", "Description",
                 "user@gmail.com", 3000, "1@cuser", getUsersRoles(), true));
         Mockito.when(usersRepository.findByUsername(any())).thenReturn(user);
         final Optional<User> person = service.findByUserName("User");

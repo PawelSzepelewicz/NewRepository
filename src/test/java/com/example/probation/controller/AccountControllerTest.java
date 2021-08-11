@@ -54,7 +54,7 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.roles").isArray())
                 .andExpect(jsonPath("$.roles[0].role").value("USER"))
                 .andExpect(jsonPath("$.password").doesNotHaveJsonPath());
-        var person = repository.findByUsername("Person");
+        final var person = repository.findByUsername("Person");
         assertTrue(person.isPresent());
         assertTrue(tokenRepository.getByUser(person.get()).isPresent());
         assertFalse(person.get().isEnabled());

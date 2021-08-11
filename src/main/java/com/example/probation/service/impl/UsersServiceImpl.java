@@ -26,11 +26,11 @@ public class UsersServiceImpl implements UsersService {
     private final TokenService tokenService;
     private final CustomUserDetailsService detailsService;
     private final ApplicationEventPublisher eventPublisher;
+    public static final Integer ADDITION = 15;
 
     @Override
     public User registerNewUser(final User user) {
-        Set<Role> roles = Set.of(roleService.getRoleByRole("USER"));
-        user.setRoles(roles);
+        user.setRoles(Set.of(roleService.getRoleByRole("USER")));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
         return usersRepository.save(user);
@@ -68,12 +68,12 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public Integer calculateWinnerRating(Integer currentRating) {
-        return currentRating + 15;
+        return currentRating + ADDITION;
     }
 
     @Override
     public Integer calculateLoserRating(Integer currentRating) {
-        return currentRating - 15;
+        return currentRating - ADDITION;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User getCurrentUser() {
-        String username = detailsService.getCurrentUsername();
+        final String username = detailsService.getCurrentUsername();
 
         if (username == null) {
             throw new NoSuchUserException();
