@@ -2,11 +2,12 @@ package com.example.probation.service.impl;
 
 import com.example.probation.core.entity.User;
 import com.example.probation.core.entity.VerificationToken;
-import com.example.probation.event.OnRegistrationCompleteEvent;
 import com.example.probation.repository.TokenRepository;
 import com.example.probation.service.TokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class TokenServiceImpl implements TokenService {
     private final TokenRepository tokenRepository;
     private final MessageSource messages;
     private final JavaMailSender mailSender;
+
+    @Value("${server.host}")
+    String host;
 
     @Override
     public void saveNewToken(VerificationToken token) {
@@ -39,18 +43,17 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void confirmRegistration(OnRegistrationCompleteEvent event) {
-        var user = event.getUser();
-        var token = UUID.randomUUID().toString();
+    public void confirmRegistration(final User user) {
+        final var token = UUID.randomUUID().toString();
         saveNewToken(new VerificationToken(token, user));
-        String recipientAddress = user.getEmail();
-        var subject = "Registration Confirmation";
-        String confirmationUrl = event.getAppUrl() + "/confirmation?token=" + token;
-        String message = messages.getMessage("message.registrationSuccess", null, event.getLocale());
-        var email = new SimpleMailMessage();
+        final String recipientAddress = user.getEmail();
+        final var subject = "Registration Confirmation";
+        final String confirmationUrl = host + "/confirmation?token=" + token;
+        final String message = messages.getMessage("message.registrationSuccess", null, LocaleContextHolder.getLocale());
+        final var email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message + "\r\n" + "http://localhost:8080" + confirmationUrl);
+        email.setText(message + "\r\n" + confirmationUrl);
         mailSender.send(email);
     }
 }

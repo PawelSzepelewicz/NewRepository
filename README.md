@@ -1,0 +1,1 @@
+To start the application you should add the argument `--add-opens java.base/java.lang=ALL-UNNAMED` to the you JVM options.

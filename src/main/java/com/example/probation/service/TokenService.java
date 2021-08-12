@@ -13,5 +13,5 @@ public interface TokenService {
 
     Optional<User> getUserByToken(String token);
 
-    void confirmRegistration(OnRegistrationCompleteEvent event);
+    void confirmRegistration(User user);
 }
