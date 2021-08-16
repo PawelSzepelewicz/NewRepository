@@ -1,1 +1,2 @@
 To start the application you should add the argument `--add-opens java.base/java.lang=ALL-UNNAMED` to the you JVM options.
+To start the application with Docker, and include the profile "local" provide the command `docker-compose --env-file .env.local up --build -d` in console.
