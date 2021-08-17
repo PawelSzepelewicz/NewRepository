@@ -1,6 +1,5 @@
 $(document).ready(
     function () {
-        const host = ${server.host}
         getCurrentUser()
         getUsersByRating()
         getNextUsers()
