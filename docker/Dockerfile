@@ -1,5 +1,4 @@
 FROM openjdk:16-jdk-alpine
-EXPOSE 8084
 WORKDIR ..
 RUN pwd
 COPY target/probation-0.0.1-SNAPSHOT.jar probation.jar

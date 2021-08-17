@@ -1,6 +1,6 @@
 $(document).ready(
     function () {
-        const host = "http://localhost:8084"
+        const host = ${server.host}
         getCurrentUser()
         getUsersByRating()
         getNextUsers()

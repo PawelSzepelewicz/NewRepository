@@ -1,6 +1,5 @@
 $(document).ready(
     function () {
-        const host = "http://localhost:8084"
         $('#userForm').submit(function (event) {
             event.preventDefault()
             removeMessages()
@@ -29,6 +28,7 @@ $(document).ready(
                 success: function (data) {
                     resetData()
                     $('.form-message').text('User has been created successfully.')
+                    console.log(host);
                 },
                 error: function (errMsg) {
                     errMsg.responseJSON.forEach(error => {
@@ -62,7 +62,7 @@ $(document).ready(
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
-                    window.location = 'http://localhost:8084/login'
+                    window.location = `${host}/login`
                 }
             })
         }

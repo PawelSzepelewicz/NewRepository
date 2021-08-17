@@ -6,7 +6,7 @@ services:
     container_name: db_mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DATASOURCE_PASSWORD}
-      MYSQL_DATABASE_NAME: spring_db
+      MYSQL_DATABASE: spring_db
       MYSQL_USER: root123
       MYSQL_PASSWORD: ${DATASOURCE_PASSWORD}
     ports:
@@ -26,8 +26,8 @@ services:
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://db_mysql:3306/spring_db"
-      SPRING_DATASOURCE_USERNAME: "root123"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db_mysql/spring_db?createDatabaseIfNotExist=true"
+      SPRING_DATASOURCE_USERNAME: root123
       SPRING_DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
       SPRING_MAIL_USERNAME: ${MAIL_NAME}
       SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
