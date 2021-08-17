@@ -20,10 +20,10 @@ class RoleServiceImplTest {
     private RoleServiceImpl service;
 
     @Test
-    void getRoleByRole() {
+    void getRoleByRoleName() {
         final Role role = new Role("ROLE");
         final String userRole = "USER";
-        Mockito.when(repository.getRoleByRole(any())).thenReturn(role);
-        assertEquals(service.getRoleByRole(userRole).getRole(), role.getRole());
+        Mockito.when(repository.getRoleByRoleName(any())).thenReturn(role);
+        assertEquals(service.getRoleByRoleName(userRole).getRoleName(), role.getRoleName());
     }
 }

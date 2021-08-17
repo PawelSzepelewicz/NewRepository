@@ -17,14 +17,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UsersRepository usersRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usersRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserDetails loadUserByUsername(final String username) {
+        return usersRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User not found"));
     }
 
     public String getCurrentUsername() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
+        final var auth = SecurityContextHolder.getContext().getAuthentication();
+        final var anonymous = "anonymousUser";
 
-        if (auth == null || auth.getName().equals("anonymousUser")) {
+        if (auth == null || anonymous.equals(auth.getName())) {
             throw new ForbiddenException();
         }
 

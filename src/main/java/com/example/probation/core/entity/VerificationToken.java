@@ -19,10 +19,14 @@ import java.util.Date;
 public class VerificationToken extends AbstractEntity {
     private static final int EXPIRATION = 60 * 2;
 
+    @Column(name = "token")
     private String token;
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_token", joinColumns = @JoinColumn(name = "token_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    @JoinTable(name = "user_token",
+            joinColumns = @JoinColumn(name = "token_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private User user;
+    @Column(name = "expiryDate")
     private Date expiryDate;
 
     public VerificationToken(final String token, final User user) {
@@ -33,7 +37,7 @@ public class VerificationToken extends AbstractEntity {
     }
 
     private Date calculateExpiryDate() {
-        var cal = Calendar.getInstance();
+        final var cal = Calendar.getInstance();
         cal.setTime(new Timestamp(cal.getTime().getTime()));
         cal.add(Calendar.MINUTE, VerificationToken.EXPIRATION);
 

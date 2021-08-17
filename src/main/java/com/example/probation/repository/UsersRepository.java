@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface UsersRepository extends JpaRepository<User, Long> {
-    User getById(Long id);
 
     @Query(value = "SELECT * FROM users ORDER BY RAND() LIMIT 2", nativeQuery = true)
     List<User> getRandomUsers();

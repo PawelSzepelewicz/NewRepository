@@ -23,7 +23,7 @@ class UsersRepositoryTest {
     private RoleRepository rolesRepository;
 
     @Test
-    void getById() throws Exception {
+    void findById() throws Exception {
         final Optional<User> userA = repository.findById(1L);
         final Optional<User> userB = repository.findById(2L);
         assertTrue(userA.isPresent());

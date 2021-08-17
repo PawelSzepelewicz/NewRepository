@@ -8,7 +8,11 @@ import com.example.probation.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -20,7 +24,8 @@ public class UsersController {
     private final UsersService service;
 
     @PostMapping("/{winnerId}/win/{loserId}")
-    public ResponseEntity<SuccessMessage> changeRating(@PathVariable("winnerId") final User winner, @PathVariable("loserId") final User loser) {
+    public ResponseEntity<SuccessMessage> changeRating(
+            @PathVariable("winnerId") final User winner, @PathVariable("loserId") final User loser) {
         service.redefineRating(winner, loser);
 
         return ResponseEntity.ok(new SuccessMessage());

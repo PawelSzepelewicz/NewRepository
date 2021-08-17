@@ -18,20 +18,22 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class WebRestControllerAdvice extends ResponseEntityExceptionHandler {
+
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<List<ErrorsWrapper>> handleNotFoundException(final ConstraintViolationException e) {
-        final List<ErrorsWrapper> errorsWrapper = e.getConstraintViolations().stream().map(cv ->
-                new ErrorsWrapper(cv.getPropertyPath().toString(),
-                        cv.getMessage())).collect(Collectors.toList());
+        final List<ErrorsWrapper> errorsWrapper = e.getConstraintViolations().stream()
+                .map(cv -> new ErrorsWrapper(cv.getPropertyPath().toString(), cv.getMessage()))
+                .collect(Collectors.toList());
 
         return new ResponseEntity<>(errorsWrapper, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        final List<ErrorsWrapper> errorsWrappers = ex.getBindingResult().getFieldErrors().stream().map(cv ->
-                new ErrorsWrapper(cv.getField(), cv.getDefaultMessage())).collect(Collectors.toList());
+        final List<ErrorsWrapper> errorsWrappers = ex.getBindingResult().getFieldErrors().stream()
+                .map(cv -> new ErrorsWrapper(cv.getField(), cv.getDefaultMessage()))
+                .collect(Collectors.toList());
 
         return new ResponseEntity<>(errorsWrappers, HttpStatus.BAD_REQUEST);
     }

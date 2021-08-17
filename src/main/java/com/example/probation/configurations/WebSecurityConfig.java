@@ -16,29 +16,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService userDetailsService;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        var homeUrl = "/home";
+    protected void configure(final HttpSecurity http) throws Exception {
+        final var homeUrl = "/home";
+        final String adminRole = "ADMIN";
+        final String userRole = "USER";
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/accounts/**").permitAll()
                 .antMatchers("/registration").permitAll()
-                .antMatchers("/users/{winnerId}/win/{loserId}").hasAnyAuthority("ADMIN", "USER")
-                .antMatchers("/users/getByRating").permitAll()
+                .antMatchers("/users/{winnerId}/win/{loserId}").hasAnyAuthority(adminRole, userRole)
+                .antMatchers("/users/top").permitAll()
                 .antMatchers("/users/random").permitAll()
                 .antMatchers(homeUrl).permitAll()
                 .antMatchers("/confirmation/**").permitAll()
                 .antMatchers("/**").permitAll()
-                .and().formLogin().defaultSuccessUrl(homeUrl).and().logout();
+                .and().formLogin().defaultSuccessUrl(homeUrl)
+                .and().logout();
         http.logout().logoutSuccessHandler((request, response, authentication) -> response.sendRedirect(homeUrl));
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
+    public void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
     protected PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+        final int power = 12;
+        return new BCryptPasswordEncoder(power);
     }
 }

@@ -69,9 +69,9 @@ class UsersServiceTest {
         testUser.setPassword(defaultPassword);
         final Role testRole = new Role();
         testRole.setId(1L);
-        testRole.setRole("USER");
+        testRole.setRoleName("USER");
         Mockito.when(usersRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
-        Mockito.when(roleService.getRoleByRole(any())).thenAnswer(i -> testRole);
+        Mockito.when(roleService.getRoleByRoleName(any())).thenAnswer(i -> testRole);
         final User createdUser = service.registerNewUser(testUser);
         assertTrue(passwordEncoder.matches(defaultPassword, createdUser.getPassword()));
         assertTrue(createdUser.getRoles().contains(testRole));
