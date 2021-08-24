@@ -15,10 +15,10 @@ class RoleRepositoryTest {
     private RoleRepository repository;
 
     @Test
-    public void getRoleByRole() {
+    public void getRoleByRoleName() {
         final String role = "USER";
-        final Role userRole = repository.getRoleByRole(role);
+        final Role userRole = repository.getRoleByRoleName(role);
         assertNotNull(userRole);
-        assertEquals(userRole.getRole(), role);
+        assertEquals(userRole.getRoleName(), role);
     }
 }

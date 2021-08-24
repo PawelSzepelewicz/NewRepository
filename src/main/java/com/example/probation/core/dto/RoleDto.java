@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class RoleDto {
-    private String role;
+    private String roleName;
 }

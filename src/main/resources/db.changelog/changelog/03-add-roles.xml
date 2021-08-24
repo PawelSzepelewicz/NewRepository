@@ -9,8 +9,8 @@
              endDelimiter=";"
              splitStatements="true"
              stripComments="true">
-            Insert into ROLES (ID,ROLE) value (1, "USER");
-            Insert into ROLES (ID,ROLE) value (2, "ADMIN");
+            Insert into roles (ID,ROLE_NAME) value (1, "USER");
+            Insert into roles (ID,ROLE_NAME) value (2, "ADMIN");
         </sql>
     </changeSet>
 </databaseChangeLog>

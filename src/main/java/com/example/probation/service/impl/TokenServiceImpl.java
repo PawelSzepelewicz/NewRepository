@@ -25,20 +25,20 @@ public class TokenServiceImpl implements TokenService {
     private final JavaMailSender mailSender;
 
     @Value("${server.host}")
-    String host;
+    private String host;
 
     @Override
-    public void saveNewToken(VerificationToken token) {
+    public void saveNewToken(final VerificationToken token) {
         tokenRepository.save(token);
     }
 
     @Override
-    public Optional<VerificationToken> findByToken(String token) {
+    public Optional<VerificationToken> findByToken(final String token) {
         return tokenRepository.findByToken(token);
     }
 
     @Override
-    public Optional<User> getUserByToken(String token) {
+    public Optional<User> getUserByToken(final String token) {
         return Optional.of(findByToken(token).orElseThrow().getUser());
     }
 

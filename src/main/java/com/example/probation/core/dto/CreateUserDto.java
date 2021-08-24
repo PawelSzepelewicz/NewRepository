@@ -11,9 +11,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class CreateUserDto {
     @UniqueUsername
     @NotBlank(message = "{name.notempty}")

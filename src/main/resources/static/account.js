@@ -21,13 +21,14 @@ $(document).ready(
             }
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8080/accounts',
+                url: `${host}/accounts`,
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
                     resetData()
                     $('.form-message').text('User has been created successfully.')
+                    console.log(host);
                 },
                 error: function (errMsg) {
                     errMsg.responseJSON.forEach(error => {
@@ -57,11 +58,11 @@ $(document).ready(
             const searchParams = new URLSearchParams(paramsString);
             $.ajax({
                 type: 'GET',
-                url: `http://localhost:8080/accounts?${searchParams}`,
+                url: `${host}/accounts?${searchParams}`,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
-                    window.location = 'http://localhost:8080/login'
+                    window.location = `${host}/login`
                 }
             })
         }

@@ -1,9 +1,13 @@
 package com.example.probation.service.impl;
 
-import com.example.probation.core.entity.Role;
 import com.example.probation.core.entity.User;
 import com.example.probation.event.OnRegistrationCompleteEvent;
-import com.example.probation.exception.*;
+
+import com.example.probation.exception.ForbiddenException;
+import com.example.probation.exception.TimeHasExpiredException;
+import com.example.probation.exception.NoSuchUserException;
+import com.example.probation.exception.TokenNotFoundException;
+import com.example.probation.exception.UserNotFoundByTokenException;
 import com.example.probation.repository.UsersRepository;
 import com.example.probation.service.RoleService;
 import com.example.probation.service.TokenService;
@@ -14,35 +18,40 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Calendar;
 
 @Transactional
 @Service
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
+    public static final Integer ADDITION = 15;
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
     private final TokenService tokenService;
     private final CustomUserDetailsService detailsService;
     private final ApplicationEventPublisher eventPublisher;
-    public static final Integer ADDITION = 15;
 
     @Override
     public User registerNewUser(final User user) {
-        user.setRoles(Set.of(roleService.getRoleByRole("USER")));
+        final var userRole = "USER";
+        user.setRoles(Set.of(roleService.getRoleByRoleName(userRole)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
         return usersRepository.save(user);
     }
 
     @Override
-    public boolean checkEmailExistence(String email) {
+    public boolean checkEmailExistence(final String email) {
         return usersRepository.findByEmail(email).isPresent();
     }
 
     @Override
-    public boolean checkUsernameExistence(String username) {
+    public boolean checkUsernameExistence(final String username) {
         return usersRepository.findByUsername(username).isPresent();
     }
 
@@ -67,17 +76,17 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Integer calculateWinnerRating(Integer currentRating) {
+    public Integer calculateWinnerRating(final Integer currentRating) {
         return currentRating + ADDITION;
     }
 
     @Override
-    public Integer calculateLoserRating(Integer currentRating) {
+    public Integer calculateLoserRating(final Integer currentRating) {
         return currentRating - ADDITION;
     }
 
     @Override
-    public Optional<User> findByUserName(String username) {
+    public Optional<User> findByUserName(final String username) {
         return usersRepository.findByUsername(username);
     }
 
@@ -86,7 +95,7 @@ public class UsersServiceImpl implements UsersService {
         final String username = detailsService.getCurrentUsername();
 
         if (username == null) {
-            throw new NoSuchUserException();
+            throw new NoSuchUserException("{user.no.such}");
         }
 
         return findByUserName(username).orElseThrow(ForbiddenException::new);
@@ -99,9 +108,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User saveRegisteredUser(final String token) {
-        var verificationToken = tokenService.findByToken(token).orElseThrow(UserNotFoundByTokenException::new);
-        var user = tokenService.getUserByToken(token).orElseThrow();
-        var cal = Calendar.getInstance();
+        final var verificationToken = tokenService.findByToken(token).orElseThrow(UserNotFoundByTokenException::new);
+        final var user = tokenService.getUserByToken(token).orElseThrow();
+        final var cal = Calendar.getInstance();
 
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             throw new TimeHasExpiredException();

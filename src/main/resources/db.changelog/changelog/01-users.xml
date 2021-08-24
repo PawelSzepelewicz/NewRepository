@@ -39,7 +39,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="role" type="varchar(255)">
+            <column name="role_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

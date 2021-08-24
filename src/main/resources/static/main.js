@@ -23,7 +23,7 @@ $(document).ready(
         function getNextUsers() {
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/users/random',
+                url: `${host}/users/random`,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
@@ -48,7 +48,7 @@ $(document).ready(
             }
             $.ajax({
                 type: 'POST',
-                url: `http://localhost:8080/users/${formData.winnerId}/win/${formData.loserId}`,
+                url: `${host}/users/${formData.winnerId}/win/${formData.loserId}`,
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
@@ -67,7 +67,7 @@ $(document).ready(
         function getUsersByRating() {
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/users/top',
+                url: `${host}/users/top`,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
@@ -102,7 +102,7 @@ $(document).ready(
         function getCurrentUser() {
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/users/current',
+                url: `${host}/users/current`,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {

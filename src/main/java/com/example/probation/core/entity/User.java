@@ -19,19 +19,24 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends AbstractEntity implements UserDetails {
     private static final Integer INITIAL_RATING = 2500;
-    private static final boolean ENABLED = false;
+    private static final boolean INITIAL_ENABLED = false;
+
     @Column(name = "user_name")
     private String username;
+    @Column(name = "description")
     private String description;
+    @Column(name = "email")
     private String email;
+    @Column(name = "rating")
     private Integer rating = INITIAL_RATING;
+    @Column(name = "password")
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
     @Column(name = "enabled")
-    private boolean enabled = ENABLED;
+    private boolean enabled = INITIAL_ENABLED;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

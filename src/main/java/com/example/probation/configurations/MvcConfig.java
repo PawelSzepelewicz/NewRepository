@@ -20,7 +20,6 @@ public class MvcConfig implements WebMvcConfigurer {
         final var messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:messages");
         messageSource.setDefaultEncoding("UTF-8");
-
         return messageSource;
     }
 
@@ -28,7 +27,6 @@ public class MvcConfig implements WebMvcConfigurer {
     public Validator getValidator() {
         final var bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource());
-
         return bean;
     }
 
@@ -36,7 +34,6 @@ public class MvcConfig implements WebMvcConfigurer {
     public LocaleResolver localeResolver() {
         final var sessionLocaleResolver = new SessionLocaleResolver();
         sessionLocaleResolver.setDefaultLocale(new Locale("en", "EN"));
-
         return sessionLocaleResolver;
     }
 }
