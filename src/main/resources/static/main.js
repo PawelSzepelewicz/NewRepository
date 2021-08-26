@@ -106,7 +106,7 @@ $(document).ready(
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
-                    if (data.roles.some(r => r.role === 'ADMIN')) {
+                    if (data.roles.some(r => r.roleName === 'ADMIN')) {
                         $('#creation').closest('.creation').removeAttr('hidden')
                     }
                     $('.current-user').addClass('text-primary')
