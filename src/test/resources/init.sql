@@ -5,8 +5,8 @@ truncate table VERIFICATION_TOKEN;
 truncate table ROLES;
 truncate table USERS;
 SET REFERENTIAL_INTEGRITY TRUE;
-insert into ROLES(id,role) values (1, 'USER');
-insert into ROLES(id,role) values (2, 'ADMIN');
+insert into ROLES(id,role_name) values (1, 'USER');
+insert into ROLES(id,role_name) values (2, 'ADMIN');
 insert into USERS(id, user_name, description, rating, email, password, enabled)
 values (1, 'Admin', 'Developer', 2500, 'admin@gmail.com', '$2a$12$9jjZvojR3Bnf04b/9lrq0eRCsRp6pQFmJPaEDe3Ytq0MjYLschwJe', true);
 insert into USER_ROLES(user_id, role_id) values (1,1);
