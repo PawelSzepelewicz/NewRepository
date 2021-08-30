@@ -14,23 +14,20 @@ import java.util.*
 @Configuration
 class MvcConfig : WebMvcConfigurer {
     override fun getValidator(): Validator =
-        LocalValidatorFactoryBean().let {
-            it.setValidationMessageSource(messageSource())
-            return it
+        LocalValidatorFactoryBean().apply {
+            setValidationMessageSource(messageSource())
         }
 
     @Bean
     fun messageSource(): MessageSource =
-        ReloadableResourceBundleMessageSource().let {
-            it.setBasename("classpath:messages")
-            it.setDefaultEncoding("UTF-8")
-            return it
+        ReloadableResourceBundleMessageSource().apply {
+            setBasename("classpath:messages")
+            setDefaultEncoding("UTF-8")
         }
 
     @Bean
     fun localeResolver(): LocaleResolver? =
-        SessionLocaleResolver().let {
-            it.setDefaultLocale(Locale("en", "EN"))
-            return it
+        SessionLocaleResolver().apply {
+            setDefaultLocale(Locale("en", "EN"))
         }
 }

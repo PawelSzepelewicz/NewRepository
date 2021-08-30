@@ -11,7 +11,8 @@ import javax.persistence.*
 data class VerificationToken(
     @Column(name = "token")
     var token: String? = null,
-    @OneToOne(targetEntity = User::class, fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @OneToOne(targetEntity = User::class, fetch = FetchType.EAGER,
+        cascade = [CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH])
     @JoinTable(
         name = "user_token",
         joinColumns = [JoinColumn(name = "token_id", referencedColumnName = "id")],

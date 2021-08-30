@@ -1,7 +1,14 @@
 package com.example.probation.core.entity
 
 import lombok.EqualsAndHashCode
-import javax.persistence.*
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
+import javax.persistence.Table
 
 @Entity
 @Table(name = "users")
@@ -17,7 +24,8 @@ data class User(
     var rating: Int = INITIAL_RATING,
     @Column(name = "password")
     var password: String? = null,
-    @ManyToMany(targetEntity = Role::class, fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @ManyToMany(targetEntity = Role::class, fetch = FetchType.EAGER,
+        cascade = [CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH])
     @JoinTable(
         name = "user_roles",
         joinColumns = [JoinColumn(name = "user_id")],

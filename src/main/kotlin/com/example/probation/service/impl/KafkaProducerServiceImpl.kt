@@ -19,7 +19,7 @@ class KafkaProducerServiceImpl(
         val logDto = LogDto()
         try {
             logDto.username = detailsService.getCurrentUsername()
-        } catch (e: ForbiddenException)
+        } catch (e: ForbiddenException) {}
         logDto.action = action
         val cal = Calendar.getInstance()
         logDto.actionTime = Timestamp(cal.time.time)

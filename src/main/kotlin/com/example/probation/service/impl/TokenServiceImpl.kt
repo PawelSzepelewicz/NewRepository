@@ -3,6 +3,7 @@ package com.example.probation.service.impl
 import com.example.probation.core.entity.User
 import com.example.probation.core.entity.VerificationToken
 import com.example.probation.core.enums.Actions
+import com.example.probation.exception.EntityNotFoundException
 import com.example.probation.exception.TokenNotFoundException
 import com.example.probation.repository.TokenRepository
 import com.example.probation.service.KafkaProducerService
@@ -53,5 +54,13 @@ class TokenServiceImpl(
         )
         mailSender.send(email)
         producer.send(Actions.REGISTER.action)
+    }
+
+    override fun deleteTokenByUser(user: User) {
+        tokenRepository.getByUser(user).let {
+            if (it != null) {
+                tokenRepository.delete(it)
+            }
+        }
     }
 }

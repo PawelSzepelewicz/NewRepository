@@ -11,4 +11,6 @@ interface TokenService {
     fun getUserByToken(token: String): User?
 
     fun confirmRegistration(user: User)
+
+    fun deleteTokenByUser(user: User)
 }

@@ -101,4 +101,18 @@ class WebRestControllerAdvice : ResponseEntityExceptionHandler() {
         ex.message
         return ResponseEntity(HttpStatus.BAD_REQUEST)
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(PasswordDoesNotMatchesException::class)
+    fun handlePasswordDoesNotMatchesException(ex: PasswordDoesNotMatchesException): ResponseEntity<Any> {
+        val errorsWrapper = ErrorsWrapper("password", ex.message)
+        return ResponseEntity(errorsWrapper, HttpStatus.FORBIDDEN)
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ValidationNewDataException::class)
+    fun handleValidationNewDataException(ex: ValidationNewDataException): ResponseEntity<Any> {
+        val errorsWrapper = ErrorsWrapper(ex.field, ex.message)
+        return ResponseEntity(errorsWrapper, HttpStatus.FORBIDDEN)
+    }
 }

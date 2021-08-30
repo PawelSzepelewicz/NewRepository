@@ -33,4 +33,10 @@ class PagesController(
         model["host"] = host
         return "confirmation"
     }
+
+    @GetMapping("/page")
+    fun page(model: Model): String {
+        model["host"] = host
+        return "personal"
+    }
 }

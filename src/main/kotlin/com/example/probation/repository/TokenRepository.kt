@@ -8,4 +8,6 @@ interface TokenRepository : JpaRepository<VerificationToken, Long> {
     fun findByToken(token: String): VerificationToken?
 
     fun getByUser(user: User): VerificationToken?
+
+    fun deleteVerificationTokenByUser(user: User)
 }

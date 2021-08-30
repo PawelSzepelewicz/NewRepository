@@ -72,7 +72,7 @@ $(document).ready(
                 dataType: 'json',
                 success: function (data) {
                     const text = ['text-danger', 'text-warning', 'text-success', 'text-primary', 'text-info', 'text-secondary']
-                    data.forEach(function (item, i, data) {
+                    data.forEach(function (item, i) {
                         if (i <= 4) {
                             addCard(text[i], item)
                         } else {
@@ -110,7 +110,7 @@ $(document).ready(
                         $('#creation').closest('.creation').removeAttr('hidden')
                     }
                     $('.current-user').addClass('text-primary')
-                    $('#current').closest('.current-user').text(data.username)
+                    $('#current').closest('.current-user').append(`<a href="/page">${data.username}</a>`)
                     $('#login-logout').text('Log out')
                     let button = $(`.login`)
                     button.data('isAuth', 'true')

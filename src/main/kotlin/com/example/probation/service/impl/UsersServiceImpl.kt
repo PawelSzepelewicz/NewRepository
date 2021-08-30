@@ -1,9 +1,16 @@
 package com.example.probation.service.impl
 
+import com.example.probation.core.dto.ChangePasswordDto
 import com.example.probation.core.entity.User
 import com.example.probation.core.entity.VerificationToken
 import com.example.probation.event.OnRegistrationCompleteEvent
-import com.example.probation.exception.*
+import com.example.probation.exception.EntityNotFoundException
+import com.example.probation.exception.ForbiddenException
+import com.example.probation.exception.NoSuchUserException
+import com.example.probation.exception.PasswordDoesNotMatchesException
+import com.example.probation.exception.RoleNotFoundException
+import com.example.probation.exception.TimeHasExpiredException
+import com.example.probation.exception.UserNotFoundByTokenException
 import com.example.probation.repository.UsersRepository
 import com.example.probation.service.RoleService
 import com.example.probation.service.TokenService
@@ -28,8 +35,9 @@ class UsersServiceImpl(
 
     override fun registerNewUser(newUser: User): User {
         val userRole = "USER"
-        newUser.roles = mutableSetOf(roleService.getRoleByRoleName(userRole) ?:
-        throw RoleNotFoundException("role.notfound"))
+        newUser.roles = mutableSetOf(
+            roleService.getRoleByRoleName(userRole) ?: throw RoleNotFoundException("role.notfound")
+        )
         newUser.password = passwordEncoder.encode(newUser.password)
         eventPublisher.publishEvent(OnRegistrationCompleteEvent(newUser))
         return usersRepository.save(newUser)
@@ -62,22 +70,21 @@ class UsersServiceImpl(
 
 
     override fun saveRegisteredUser(token: String): User {
-        val verificationToken: VerificationToken = tokenService.findByToken(token) ?:
-        throw UserNotFoundByTokenException("{token.user.notfound}")
+        val verificationToken: VerificationToken =
+            tokenService.findByToken(token) ?: throw UserNotFoundByTokenException("{token.user.notfound}")
         val cal = Calendar.getInstance()
 
         if (verificationToken.expiryDate!!.time - cal.time.time <= 0) {
             throw TimeHasExpiredException("{time.expired}")
         }
-        return tokenService.getUserByToken(token).let{
-        it!!.enabled = true
-        usersRepository.save(it)
+        return tokenService.getUserByToken(token).let {
+            it!!.enabled = true
+            usersRepository.save(it)
         }
     }
 
     override fun getCurrentUser(): User {
-        val username = detailsService.getCurrentUsername() ?:
-        throw NoSuchUserException("{user.no.such}")
+        val username = detailsService.getCurrentUsername() ?: throw NoSuchUserException("{user.no.such}")
         return findByUserName(username)
     }
 
@@ -87,5 +94,57 @@ class UsersServiceImpl(
 
     override fun checkUsernameExistence(username: String): Boolean {
         return usersRepository.findByUsername(username) != null
+    }
+
+    fun getUserById(id: Long): User =
+        usersRepository.findById(id).orElseThrow {
+            throw EntityNotFoundException("{entity.not.found}")
+        }
+
+    override fun blockUser(userId: Long) {
+        val user: User = getUserById(userId)
+        user.enabled = false
+        usersRepository.save(user)
+    }
+
+    override fun unblockUser(userId: Long) {
+        val user: User = getUserById(userId)
+        user.enabled = true
+        usersRepository.save(user)
+    }
+
+    override fun deleteUser(userId: Long) {
+        tokenService.deleteTokenByUser(getUserById(userId))
+        usersRepository.deleteById(userId)
+    }
+
+    override fun checkUniqueNewName(newName: String, id: Long): Boolean {
+        val username = getUserById(id).username
+        return  newName == username || !checkUsernameExistence(newName)
+    }
+
+    override fun checkUniqueNewEmail(newEmail: String, id: Long): Boolean {
+        val email = getUserById(id).email
+        return  newEmail == email || !checkEmailExistence(newEmail)
+    }
+
+    override fun changePersonalData(id: Long, user: User) {
+        getUserById(id).let {
+            it.username = user.username
+            it.description = user.description
+            it.email = user.email
+            usersRepository.save(it)
+        }
+    }
+
+    override fun changePassword(changePasswordDto: ChangePasswordDto) {
+        val user: User = getUserById(changePasswordDto.id)
+
+        if (passwordEncoder.matches(changePasswordDto.oldPassword, user.password)) {
+            user.password = passwordEncoder.encode(changePasswordDto.newPassword)
+            usersRepository.save(user)
+        } else {
+            throw PasswordDoesNotMatchesException("{}")
+        }
     }
 }
