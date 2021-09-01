@@ -66,4 +66,14 @@ $(document).ready(
                 }
             })
         }
+
+        function blockUser() {
+            $.ajax({
+                type: 'POST',
+                url: `${host}/accounts/block/11`,
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                }
+            })
+        }
     })

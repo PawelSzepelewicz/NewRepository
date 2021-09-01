@@ -13,7 +13,7 @@ class RegistrationListener(
         confirmRegistration(event)
     }
 
-    fun confirmRegistration(event: OnRegistrationCompleteEvent) {
+    private fun confirmRegistration(event: OnRegistrationCompleteEvent) {
         event.user?.let {
             tokenService.confirmRegistration(it)
         }

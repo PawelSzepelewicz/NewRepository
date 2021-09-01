@@ -34,7 +34,7 @@ class UsersController(private val mapper: MapperFacade, private val service: Use
         }
 
     @GetMapping("/random")
-    fun getUsersForComparison(): ResponseEntity<List<SelectedUserDto>> =
+    fun getUsersForComparison() =
         ResponseEntity.ok(
             mapper.mapAsList(
                 service.getUsersForComparison(),
@@ -44,7 +44,7 @@ class UsersController(private val mapper: MapperFacade, private val service: Use
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/top")
-    fun getTopByRating(): ResponseEntity<List<SelectedUserDto>> =
+    fun getTopByRating() =
         ResponseEntity.ok(
             mapper.mapAsList(
                 service.getTopUsersByRating(),
@@ -53,7 +53,7 @@ class UsersController(private val mapper: MapperFacade, private val service: Use
         )
 
     @GetMapping("/current")
-    fun getCurrentUser(): ResponseEntity<UserDto> =
+    fun getCurrentUser() =
         ResponseEntity.ok(
             mapper.map(
                 service.getCurrentUser(),
@@ -61,25 +61,22 @@ class UsersController(private val mapper: MapperFacade, private val service: Use
             )
         )
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/password")
-    fun changePassword(
-        @RequestBody @Valid passwordDto: ChangePasswordDto
-    ): ResponseEntity<SuccessMessage> =
+    fun changePassword(@RequestBody @Valid passwordDto: ChangePasswordDto) =
         service.changePassword(passwordDto).let {
             ResponseEntity.ok(SuccessMessage())
         }
 
-    @PutMapping("/update/{id}")
-    fun changePersonalData(
-        @PathVariable("id") id: Long,
-        @RequestBody @Valid changedInfo: ChangeInfoDto): ResponseEntity<UserDto> =
+    @PutMapping("/update")
+    fun changePersonalData(@RequestBody @Valid changedInfo: ChangeInfoDto) =
         mapper.map(
             changedInfo,
             User::class.java
         ).let {
             ResponseEntity.ok(
                 mapper.map(
-                    service.changePersonalData(id, it),
+                    service.changePersonalData(it),
                     UserDto::class.java
                 )
             )

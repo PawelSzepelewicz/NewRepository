@@ -1,7 +1,8 @@
 package com.example.probation.controller
 
 import com.example.probation.core.enums.Actions
-import com.example.probation.service.KafkaProducerService
+import com.example.probation.core.enums.Current
+import com.example.probation.service.UsersService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -12,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 class PagesController(
     @Value("\${server.host}") private val host: String,
-    private val kafkaProducerService: KafkaProducerService
+    private val usersService: UsersService
 ) {
 
     @GetMapping("/home")
     fun home(model: Model): String {
-        kafkaProducerService.send(Actions.HOME.action)
+        usersService.sendLog(Actions.HOME.action, Current.CURRENT.value, null)
         model["host"] = host
         return "home"
     }
@@ -34,7 +35,7 @@ class PagesController(
         return "confirmation"
     }
 
-    @GetMapping("/page")
+    @GetMapping("/personal")
     fun page(model: Model): String {
         model["host"] = host
         return "personal"

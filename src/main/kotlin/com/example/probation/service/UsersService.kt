@@ -20,9 +20,9 @@ interface UsersService {
 
     fun getUserByToken(token: String): User?
 
-    fun saveRegisteredUser(token: String): User
+    fun saveRegisteredUser(token: String): User?
 
-    fun getCurrentUser(): User
+    fun getCurrentUser(): User?
 
     fun checkEmailExistence(email: String): Boolean
 
@@ -34,11 +34,13 @@ interface UsersService {
 
     fun deleteUser(userId: Long)
 
-    fun changePersonalData(id: Long, user: User)
+    fun changePersonalData(user: User)
 
     fun changePassword(changePasswordDto: ChangePasswordDto)
 
     fun checkUniqueNewName(newName: String, id: Long): Boolean
 
     fun checkUniqueNewEmail(newEmail: String, id: Long): Boolean
+
+    fun sendLog(action: String, name: String?, subject: String?)
 }

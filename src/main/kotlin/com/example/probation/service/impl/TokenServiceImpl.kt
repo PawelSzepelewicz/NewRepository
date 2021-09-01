@@ -2,11 +2,9 @@ package com.example.probation.service.impl
 
 import com.example.probation.core.entity.User
 import com.example.probation.core.entity.VerificationToken
-import com.example.probation.core.enums.Actions
-import com.example.probation.exception.EntityNotFoundException
 import com.example.probation.exception.TokenNotFoundException
+import com.example.probation.exception.UserNotFoundByTokenException
 import com.example.probation.repository.TokenRepository
-import com.example.probation.service.KafkaProducerService
 import com.example.probation.service.TokenService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.MessageSource
@@ -21,39 +19,34 @@ class TokenServiceImpl(
     private val tokenRepository: TokenRepository,
     private val messages: MessageSource,
     private val mailSender: JavaMailSender,
-    private val producer: KafkaProducerService,
-    @Value("\${server.host}") private val host: String) : TokenService {
+    @Value("\${server.host}") private val host: String
+) : TokenService {
 
     override fun saveNewToken(token: VerificationToken) {
         tokenRepository.save(token)
     }
 
-    override fun findByToken(token: String): VerificationToken =
+    override fun findByToken(token: String) =
         tokenRepository.findByToken(token) ?: throw TokenNotFoundException("token.notfound")
 
-    override fun getUserByToken(token: String): User =
-        findByToken(token).user!!
+    override fun getUserByToken(token: String) =
+        findByToken(token).user ?: throw UserNotFoundByTokenException("user.bytoken.notfound")
 
     override fun confirmRegistration(user: User) {
-        val token = UUID.randomUUID().toString()
-        saveNewToken(VerificationToken(token, user))
-        val recipientAddress = user.email
-        val subject = "Registration Confirmation"
-        val endpoint = "/confirmation?token="
-        val confirmationUrl = host + endpoint + token
-        val messageText = "message.registrationSuccess"
-        val message = messages.getMessage(messageText, null, LocaleContextHolder.getLocale())
-        val email = SimpleMailMessage()
-        email.setTo(recipientAddress)
-        email.setSubject(subject)
-        email.setText(
-            """
-                $message
-                $confirmationUrl
-                """.trimIndent()
-        )
-        mailSender.send(email)
-        producer.send(Actions.REGISTER.action)
+        UUID.randomUUID().toString().let { token ->
+            saveNewToken(VerificationToken(token, user))
+            val recipientAddress = user.email
+            val subject = "Registration Confirmation"
+            val endpoint = "/confirmation?token="
+            val confirmationUrl = host + endpoint + token
+            val messageText = "message.registrationSuccess"
+            val message = messages.getMessage(messageText, null, LocaleContextHolder.getLocale())
+            SimpleMailMessage().apply {
+                setTo(recipientAddress)
+                setSubject(subject)
+                setText("$message\n$confirmationUrl")
+            }.also {mailSender.send(it)}
+        }
     }
 
     override fun deleteTokenByUser(user: User) {

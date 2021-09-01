@@ -1,5 +1,6 @@
 package com.example.probation.configurations
 
+import com.example.probation.core.enums.Roles
 import com.example.probation.service.impl.CustomUserDetailsService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,28 +18,29 @@ import javax.servlet.http.HttpServletResponse
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class WebSecurityConfig(
+open class WebSecurityConfig(
     private val userDetailsService: CustomUserDetailsService
 ) : WebSecurityConfigurerAdapter() {
-    @Bean
-    protected fun passwordEncoder(): PasswordEncoder {
-        val power = 12
-        return BCryptPasswordEncoder(power)
+    companion object {
+        const val POWER = 12
     }
+
+    @Bean
+    protected open fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder(POWER)
 
     override fun configure(http: HttpSecurity) {
         val homeUrl = "/home"
-        val adminRole = "ADMIN"
-        val userRole = "USER"
         http.csrf().disable()
             .authorizeRequests()
             .antMatchers("/accounts/**").permitAll()
             .antMatchers("/users/password").permitAll()
             .antMatchers("/users/update").permitAll()
-            .antMatchers("/registration").permitAll()
-            .antMatchers("/block/{userId}").permitAll()
+            .antMatchers("/registration").hasAnyAuthority(Roles.ADMIN.role)
+            .antMatchers("/block/**").hasAnyAuthority(Roles.ADMIN.role)
+            .antMatchers("/unblock/**").hasAnyAuthority(Roles.ADMIN.role)
+            .antMatchers("/delete/**").hasAnyAuthority(Roles.ADMIN.role)
             .antMatchers(homeUrl).permitAll()
-            .antMatchers("/users/{winnerId}/win/{loserId}").hasAnyAuthority(adminRole, userRole)
+            .antMatchers("/users/{winnerId}/win/{loserId}").hasAnyAuthority(Roles.ADMIN.role, Roles.USER.role)
             .antMatchers("/users/top").permitAll()
             .antMatchers("/users/random").permitAll()
             .antMatchers("/confirmation/**").permitAll()

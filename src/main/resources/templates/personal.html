@@ -11,66 +11,82 @@
     </script>
 </head>
 <body>
-<div class="wrapper container" style="margin:20px 15px 15px 15px">
+<div class="wrapper container" style="margin: 20px 15px 15px 100px">
     <nav></nav>
     <div class="row">
         <aside class="col-md-5">
             <div class="jumbotron">
-                <h1 class="display-10">Pawel Szepelwicz</h1>
-                <p class="lead">The main developer of this project</p>
+                <h1 class="display-10 page-name">Personal Page</h1>
+                <p class="lead page-info">Main information</p>
                 <hr class="my-4">
                 <p>Hi there! This is your personal page</p>
-                <a class="btn btn-primary btn-lg" href="/home" role="button">Return to the game</a>
+                <a class="btn btn-dark" href="/home" role="button">Return to the game</a>
             </div>
         </aside>
         <section class="col-md-7">
-            <div class="col-md-9" style="margin: 0px 0px 10px -15px">
+            <div class="col-md-9" style="margin: 0 0 10px -15px">
                 <button type="button" role="button" class="btn-sm btn-outline-secondary edit-data">EDIT</button>
                 <button type="button" hidden role="button" class="btn-sm btn-primary save-data">SAVE</button>
             </div>
             <form name="change-data" id="change-data" class="change-data">
-                <div class="form-group row">
-                    <label for="changeUsername" class="col-sm-2 col-form-label">Username:</label>
+                <div class="form-group row form-change">
+                    <label for="change-username" class="col-sm-2 col-form-label">Username:</label>
                     <div class="col-sm-7">
-                        <input type="text" readonly="" class="form-control-plaintext" id="changeUsername" value="email@example.com">
+                        <input type="text" readonly="" class="form-control-plaintext form-control" id="change-username">
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label for="changeEmail" class="col-sm-2 col-form-label">Email:</label>
+                <div class="form-group row form-change">
+                    <label for="change-email" class="col-sm-2 col-form-label">Email:</label>
                     <div class="col-sm-7">
-                        <input type="text" readonly="" class="form-control-plaintext" id="changeEmail" value="email@example.com">
+                        <input type="text" readonly="" class="form-control-plaintext form-control" id="change-email">
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label for="changeDescription" class="col-sm-2 col-form-label">Description:</label>
+                <div class="form-group row form-change">
+                    <label for="change-description" class="col-sm-2 col-form-label">Description:</label>
                     <div class="col-sm-7">
-                        <input type="text" readonly="" class="form-control-plaintext" id="changeDescription"
-                               value="email@example.com">
+                        <input type="text" readonly="" class="form-control-plaintext form-control"
+                               id="change-description">
                     </div>
                 </div>
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="changePassword" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="changePassword"
+                            aria-haspopup="false" data-toggle="dropdown" aria-expanded="true">
                         Change password
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="changePassword" style="margin:20px 0px 0px 0px">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="oldPassword">Provide your current password</label>
-                                        <input type="password" class="form-control" id="oldPassword" placeholder="Password">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="newPassword">Provide new password</label>
-                                        <input type="password" class="form-control" id="newPassword" placeholder="Password">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Confirm</button>
-                                </div>
+                    <div class="dropdown-menu" style="margin:20px 0 0 0">
+                        <div class="card-body">
+                            <div class="form-group password-cng">
+                                <label for="old-password">Provide your current password</label>
+                                <input type="password" class="form-control" name="old-password" id="old-password"
+                                       placeholder="Password">
+                            </div>
+                            <div class="form-group password-cng">
+                                <label for="new-password">Provide new password</label>
+                                <input type="password" class="form-control" name="new-password" id="new-password"
+                                       placeholder="Password">
+                            </div>
+                            <button type="button" class="btn btn-primary password-cng">Confirm</button>
+                        </div>
                     </div>
                 </div>
             </form>
+            <br>
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="10000">
+                <div class="toast-header">
+                    <strong class="mr-auto">Success</strong>
+                    <small>Just now</small>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    You have successfully corrected the data
+                </div>
+            </div>
+            <br>
         </section>
     </div>
 </div>
-<footer></footer>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -79,8 +95,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-<script src="personal.js"></script>
-<script src="main.css"></script>
+<script src="main.js"></script>
 <script src="https://kit.fontawesome.com/ff81d4d106.js"></script>
 </body>
 </html>

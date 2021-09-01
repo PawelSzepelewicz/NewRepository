@@ -1,6 +1,5 @@
 package com.example.probation.core.dto
 
-
 import com.example.probation.validation.annotation.Password
 import com.example.probation.validation.annotation.UniqueEmail
 import com.example.probation.validation.annotation.UniqueUsername

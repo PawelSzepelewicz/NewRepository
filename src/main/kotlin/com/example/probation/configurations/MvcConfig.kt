@@ -9,24 +9,24 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 import org.springframework.web.servlet.LocaleResolver
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import org.springframework.web.servlet.i18n.SessionLocaleResolver
-import java.util.*
+import java.util.Locale
 
 @Configuration
-class MvcConfig : WebMvcConfigurer {
+open class MvcConfig : WebMvcConfigurer {
     override fun getValidator(): Validator =
         LocalValidatorFactoryBean().apply {
             setValidationMessageSource(messageSource())
         }
 
     @Bean
-    fun messageSource(): MessageSource =
+    open fun messageSource(): MessageSource =
         ReloadableResourceBundleMessageSource().apply {
             setBasename("classpath:messages")
             setDefaultEncoding("UTF-8")
         }
 
     @Bean
-    fun localeResolver(): LocaleResolver? =
+    open fun localeResolver(): LocaleResolver? =
         SessionLocaleResolver().apply {
             setDefaultLocale(Locale("en", "EN"))
         }

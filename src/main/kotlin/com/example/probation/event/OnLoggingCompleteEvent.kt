@@ -1,9 +1,8 @@
 package com.example.probation.event
 
-import com.example.probation.core.entity.User
+import com.example.probation.core.dto.UserDetailsDto
 import org.springframework.context.ApplicationEvent
 
-class OnRegistrationCompleteEvent(
-    var user: User? = null
+class OnLoggingCompleteEvent(
+    var user: UserDetailsDto
 ) : ApplicationEvent(Any())
-

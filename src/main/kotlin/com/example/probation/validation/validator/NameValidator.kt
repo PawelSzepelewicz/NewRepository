@@ -10,11 +10,10 @@ class NameValidator(
     private val usersService: UsersService
     ) : ConstraintValidator<UniqueUsername, String> {
 
-    override fun isValid(name: String?, context: ConstraintValidatorContext): Boolean {
-        return if (name == null) {
+    override fun isValid(name: String?, context: ConstraintValidatorContext) =
+        if (name == null) {
             false
         } else !usersService.checkUsernameExistence(name)
-    }
 
     override fun initialize(uniqueUsername: UniqueUsername) {
         super.initialize(uniqueUsername)

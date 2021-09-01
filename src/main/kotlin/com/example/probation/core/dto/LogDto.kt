@@ -1,6 +1,6 @@
 package com.example.probation.core.dto
 
-import java.util.*
+import java.util.Date
 import javax.validation.constraints.NotNull
 
 data class LogDto(
@@ -11,5 +11,7 @@ data class LogDto(
     @NotNull
     var action: String? = null,
     @NotNull
-    var actionTime: Date? = null
+    var actionTime: Date? = null,
+    @NotNull
+    var subject: String? = null
 )

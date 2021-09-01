@@ -1,43 +1,45 @@
 package com.example.probation.service.impl
 
-import com.example.probation.core.dto.ChangePasswordDto
 import com.example.probation.core.dto.UserDetailsDto
+import com.example.probation.event.OnLoggingCompleteEvent
 import com.example.probation.exception.ForbiddenException
-import com.example.probation.exception.NoSuchUserException
+import com.example.probation.exception.UserNotFoundException
 import com.example.probation.repository.UsersRepository
-
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.crypto.password.PasswordEncoder
-
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
 @Transactional
-class CustomUserDetailsService(
+open class CustomUserDetailsService(
     private val usersRepository: UsersRepository,
+    private val eventPublisher: ApplicationEventPublisher
 ) : UserDetailsService {
-    override fun loadUserByUsername(username: String): UserDetails {
-        return usersRepository.findByUsername(username).let {
-            it ?: throw NoSuchUserException(String.format("No such user, %s", username))
+    companion object {
+        const val ANONYMOUS = "anonymousUser"
+    }
+
+    override fun loadUserByUsername(username: String): UserDetails =
+        usersRepository.findByUsername(username)?.let {
             UserDetailsDto(
                 it.id,
                 it.username!!,
                 it.password!!,
                 it.roles,
                 it.enabled
-            )
-        }
-    }
+            ).let { userDto ->
+                eventPublisher.publishEvent(OnLoggingCompleteEvent(userDto))
+                userDto
+            }
+        } ?: throw UserNotFoundException("No such user, $username")
 
-    fun getCurrentUsername(): String? {
-        val auth = SecurityContextHolder.getContext().authentication
-        val anonymous = "anonymousUser"
-        if (auth == null || anonymous == auth.name) {
-            throw ForbiddenException("{forbidden}")
-        }
-        return auth.name
-    }
+    fun getCurrentUsername(): String =
+        SecurityContextHolder.getContext().authentication.apply {
+            if (this == null || ANONYMOUS == name) {
+                throw ForbiddenException("{forbidden}")
+            }
+        }.name
 }
