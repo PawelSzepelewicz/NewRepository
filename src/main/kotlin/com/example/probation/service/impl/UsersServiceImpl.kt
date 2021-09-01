@@ -36,10 +36,7 @@ class UsersServiceImpl(
 
     override fun registerNewUser(newUser: User): User = newUser.apply {
         password = passwordEncoder.encode(newUser.password)
-        roles = mutableSetOf(
-            roleService.getRoleByRoleName(Roles.USER.role)
-                ?: throw EntityNotFoundException("role.notfound")
-        )
+        mutableSetOf(roleService.getRoleByRoleName(Roles.USER.role))
     }.let { usersRepository.save(it) }
         .also { eventPublisher.publishEvent(OnRegistrationCompleteEvent(it)) }
 
@@ -82,9 +79,7 @@ class UsersServiceImpl(
         }
 
     override fun getCurrentUser() =
-        detailsService.getCurrentUsername()?.let {
-            findByUserName(it)
-        }
+        findByUserName(detailsService.getCurrentUsername())
 
     override fun checkEmailExistence(email: String) =
         usersRepository.findByEmail(email) != null
