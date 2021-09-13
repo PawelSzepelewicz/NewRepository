@@ -9,48 +9,9 @@
              endDelimiter=";"
              splitStatements="true"
              stripComments="true">
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
+            Insert into users (ID,USERNAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
             value (1, "Pawel Szepelewicz", "The main developer of this project", 2500, "pashashepel1997@outlook.com",
             "$2a$12$LV62Vehuivc.rtG8e5AO3uGQNv5.tMEZy0NrKEQ2GAja2tK1p1EcO", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (2, "George Washington", "1st mr. President", 2500, "washington@gmail.com",
-            "$2a$12$TloVOjm39LisHePHqafYpu3L8prEj00HmibL/FxOcsPlnbmQcWAnC", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (3, "Abraham Lincoln", "16th mr. President", 2500, "lincoln@gmail.com",
-            "$2a$12$UBdMeL5VSWVzpFWYh9i0yO7RZAGFpJZ4t1CvN7ksewMNAVmVUr8Ru", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (4, "Theodore Roosevelt", "26th mr. President", 2500, "roosevelt@gmail.com",
-            "$2a$12$MCRY/qy2m9c.Ip6/pyOadOsSNlCvsrD1eZABsRBbzNn6VY1PDbL.a", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (5, "Harry Truman", "33th mr. President", 2500, "truman@gmail.com",
-            "$2a$12$T49c2M7ng6SR1KyPRdkPlO5ThHvBQ.CaNFLumpld2yMIwBl0WsFpW", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (6, "Dwight Eisenhower", "34th mr. President", 2500, "eisenhower@gmail.com",
-            "$2a$12$hkleZv9DHVP6JlryLGBNkOq4ubPgOoPiT2CiljiXA0jfq1g4xLs1C", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (7, "John Kennedy", "35th mr. President", 2500, "kennedy@gmail.com",
-            "$2a$12$aqsp4QQF/dG4rcsS651d6..51iDL8tr3e5uHzjP27dth7caob/SJm", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (8, "Ronald Reagan", "40th mr. President", 2500, "reagan@gmail.com",
-            "$2a$12$5hhqlv20fhojMidFD1gSoOPoUmqKwtfAGoWmg7lBSZAoetlZ.cptC", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (9, "George Bush sr.", "41th mr. President", 2500, "srbush@gmail.com",
-            "$2a$12$hzcaHz.h4U/nfEG6GQvZVekpXX5XRZHfcwSVdC5eng0KiIYcVGY/6", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (10, "Bill Clinton", "42th mr. President", 2500, "clinton@gmail.com",
-            "$2a$12$H2xe8Swdjncefl5tcgUB2Oetuelgz0GkDdSw8pqy1oZk49J.5pZg6", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (11, "George Bush jr.", "43th mr. President", 2500, "jrbush@gmail.com",
-            "$2a$12$RwJsOiEgJwLInGTop6x95.xlkVto9qsMR4F0df0eX0j7zRNkKnAKS", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (12, "Barack Obama", "44th mr. President", 2500, "obama@gmail.com",
-            "$2a$12$JbHSBY/OqthdP/xUQTwbiOxhmnCs509OlQg6LSxx42NZ/.BmXUMWG", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (13, "Donald Trump", "45th mr. President", 2500, "trump@gmail.com",
-            "$2a$12$GPtqDddcZLhMcnZwSn1c2udDluC/YHdvZ/Mx8kMlyNc/YdnZ.hUq.", true);
-            Insert into users (ID,USER_NAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
-            value (14, "Joe Biden", "46th mr. President", 2500, "biden@gmail.com",
-            "$2a$12$C8oSdljMo2kXw9932qExJOrntqGRmv9ZhMBAKvbTTk6EJloui8qXG", true);
         </sql>
     </changeSet>
 </databaseChangeLog>

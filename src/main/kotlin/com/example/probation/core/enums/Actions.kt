@@ -1,15 +1,15 @@
 package com.example.probation.core.enums
 
 enum class Actions(var action: String) {
-    REGISTER("Registration in application"),
+    REGISTERED("Was registered in application by"),
+    REGISTER("Registered a new account of"),
     LOG_IN("Logging in"),
-    UNBLOCK("Admin unblocked user"),
-    CHANGE_PASSWORD("Password changing"),
-    DELETE("Admin deleted account"),
-    DELETED("Account was deleted by admin"),
-    BLOCK("Blocking account by admin"),
-    EDIT("Personal information editing"),
-    CHOOSE("Choosing someone like"),
-    HOME("Home page visiting"),
-    CONFIRM("Confirmation account by token")
+    UNBLOCK("Unblock account of"),
+    CHANGE_PASSWORD("Changed his password"),
+    DELETE("Deleted account of"),
+    DELETED("Account was deleted by"),
+    BLOCK("Blocking account of"),
+    EDIT("Edited his personal account"),
+    CHOOSE("Chose like"),
+    CONFIRM("Confirmed his account by token")
 }

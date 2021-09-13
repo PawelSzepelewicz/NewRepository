@@ -14,7 +14,7 @@ import javax.transaction.Transactional
 
 @Service
 @Transactional
-open class CustomUserDetailsService(
+class CustomUserDetailsService(
     private val usersRepository: UsersRepository,
     private val eventPublisher: ApplicationEventPublisher
 ) : UserDetailsService {
@@ -26,20 +26,20 @@ open class CustomUserDetailsService(
         usersRepository.findByUsername(username)?.let {
             UserDetailsDto(
                 it.id,
-                it.username!!,
-                it.password!!,
+                it.username,
+                it.password,
                 it.roles,
                 it.enabled
-            ).let { userDto ->
+            ).also { userDto ->
                 eventPublisher.publishEvent(OnLoggingCompleteEvent(userDto))
-                userDto
             }
         } ?: throw UserNotFoundException("No such user, $username")
 
     fun getCurrentUsername(): String =
-        SecurityContextHolder.getContext().authentication.apply {
-            if (this == null || ANONYMOUS == name) {
+        SecurityContextHolder.getContext().authentication?.run {
+            if (ANONYMOUS == name) {
                 throw ForbiddenException("{forbidden}")
             }
-        }.name
+            name
+        } ?: throw ForbiddenException("{forbidden}")
 }

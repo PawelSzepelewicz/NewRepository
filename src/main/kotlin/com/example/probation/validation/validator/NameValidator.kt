@@ -13,7 +13,9 @@ class NameValidator(
     override fun isValid(name: String?, context: ConstraintValidatorContext) =
         if (name == null) {
             false
-        } else !usersService.checkUsernameExistence(name)
+        } else {
+            !usersService.checkUsernameExistence(name)
+        }
 
     override fun initialize(uniqueUsername: UniqueUsername) {
         super.initialize(uniqueUsername)

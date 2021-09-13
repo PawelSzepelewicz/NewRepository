@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class LoggingListener(
-    private val kafkaProducerService: KafkaProducerService,
+    private val kafkaService: KafkaProducerService,
 ) : ApplicationListener<OnLoggingCompleteEvent> {
     override fun onApplicationEvent(event: OnLoggingCompleteEvent) {
-       kafkaProducerService.send(Actions.LOG_IN.action, event.user.username, null)
+        event.user.username?.let { kafkaService.send(Actions.LOG_IN.action, it) }
     }
 }

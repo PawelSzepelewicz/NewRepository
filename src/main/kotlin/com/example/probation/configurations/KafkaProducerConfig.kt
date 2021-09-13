@@ -14,12 +14,12 @@ import org.springframework.kafka.support.serializer.JsonSerializer
 
 @EnableKafka
 @Configuration
-open class KafkaProducerConfig(
+class KafkaProducerConfig(
     @Value("\${kafka.server}") private val kafkaServer: String,
     @Value("\${kafka.group.id}") private val kafkaProducerId: String
 ) {
     @Bean
-    open fun producerFactory(): ProducerFactory<String, LogDto> {
+    fun producerFactory(): ProducerFactory<String, LogDto> {
         val props: MutableMap<String, Any> = HashMap()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaServer
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
@@ -29,7 +29,7 @@ open class KafkaProducerConfig(
     }
 
     @Bean
-    open fun kafkaTemplate(): KafkaTemplate<String, LogDto> {
+    fun kafkaTemplate(): KafkaTemplate<String, LogDto> {
         return KafkaTemplate(producerFactory())
     }
 }

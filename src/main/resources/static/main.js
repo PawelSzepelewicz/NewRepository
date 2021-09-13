@@ -54,7 +54,7 @@ $(document).ready(
         function getNextUsers() {
             $.ajax({
                 type: 'GET',
-                url: `${host}/users/random`,
+                url: `/users/random`,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
@@ -79,7 +79,7 @@ $(document).ready(
             }
             $.ajax({
                 type: 'POST',
-                url: `${host}/users/${formData.winnerId}/win/${formData.loserId}`,
+                url: `/users/${formData.winnerId}/win/${formData.loserId}`,
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
@@ -112,7 +112,7 @@ $(document).ready(
         function getUsersByRating() {
             $.ajax({
                 type: 'GET',
-                url: `${host}/users/top`,
+                url: `/users/top`,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
@@ -167,7 +167,7 @@ $(document).ready(
         function getCurrentUser() {
             $.ajax({
                 type: 'GET',
-                url: `${host}/users/current`,
+                url: `/users/current`,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
@@ -205,7 +205,7 @@ $(document).ready(
             }
             $.ajax({
                 type: 'PUT',
-                url: `${host}/users/update`,
+                url: `/users/update`,
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
@@ -238,7 +238,7 @@ $(document).ready(
             }
             $.ajax({
                 type: 'POST',
-                url: `${host}/users/password`,
+                url: `/users/password`,
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
@@ -260,7 +260,7 @@ $(document).ready(
         function blockUser(userId) {
             $.ajax({
                 type: 'POST',
-                url: `${host}/accounts/block/${userId}`,
+                url: `/accounts/block/${userId}`,
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
                 }
@@ -270,7 +270,7 @@ $(document).ready(
         function unblockUser(userId) {
             $.ajax({
                 type: 'POST',
-                url: `${host}/accounts/unblock/${userId}`,
+                url: `/accounts/unblock/${userId}`,
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
                 }
@@ -280,7 +280,7 @@ $(document).ready(
         function deleteUser(userId) {
             $.ajax({
                 type: 'DELETE',
-                url: `${host}/accounts/${userId}`,
+                url: `/accounts/${userId}`,
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
                     getUsersByRating()

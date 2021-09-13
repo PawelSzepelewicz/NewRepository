@@ -1,17 +1,16 @@
 package com.example.probation.core.dto
 
-import java.util.Date
-import javax.validation.constraints.NotNull
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
+import java.time.LocalDateTime
 
 data class LogDto(
-    @NotNull
-    var username: String? = null,
-    @NotNull
-    var message: String? = null,
-    @NotNull
-    var action: String? = null,
-    @NotNull
-    var actionTime: Date? = null,
-    @NotNull
-    var subject: String? = null
+    var subjectName: String,
+    var action: String,
+    var objectName: String? = null,
+    @JsonSerialize(using = LocalDateTimeSerializer::class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer::class)
+    var actionTime: LocalDateTime
 )
