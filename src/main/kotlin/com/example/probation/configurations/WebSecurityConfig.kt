@@ -18,36 +18,30 @@ import javax.servlet.http.HttpServletResponse
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-open class WebSecurityConfig(
+class WebSecurityConfig(
     private val userDetailsService: CustomUserDetailsService
 ) : WebSecurityConfigurerAdapter() {
-    companion object {
-        const val POWER = 12
-    }
-
     @Bean
-    protected open fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder(POWER)
+    protected fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder(POWER)
 
     override fun configure(http: HttpSecurity) {
         val homeUrl = "/home"
         http.csrf().disable()
             .authorizeRequests()
+            .antMatchers("/users/{winnerId}/win/{loserId}").hasAnyAuthority(Roles.ADMIN.role, Roles.USER.role)
             .antMatchers("/accounts/**").permitAll()
             .antMatchers("/users/password").permitAll()
-            .antMatchers("/users/update").permitAll()
+            .antMatchers("/users/update").hasAnyAuthority(Roles.ADMIN.role, Roles.USER.role)
             .antMatchers("/registration").hasAnyAuthority(Roles.ADMIN.role)
             .antMatchers("/block/**").hasAnyAuthority(Roles.ADMIN.role)
             .antMatchers("/unblock/**").hasAnyAuthority(Roles.ADMIN.role)
             .antMatchers("/delete/**").hasAnyAuthority(Roles.ADMIN.role)
             .antMatchers(homeUrl).permitAll()
-            .antMatchers("/users/{winnerId}/win/{loserId}").hasAnyAuthority(Roles.ADMIN.role, Roles.USER.role)
             .antMatchers("/users/top").permitAll()
             .antMatchers("/users/random").permitAll()
             .antMatchers("/confirmation/**").permitAll()
             .antMatchers("/**").permitAll()
-        http.csrf().disable()
-            .formLogin().defaultSuccessUrl(homeUrl)
-            .and().logout()
+        http.formLogin().defaultSuccessUrl(homeUrl)
         http.logout()
             .logoutSuccessHandler { _: HttpServletRequest, response: HttpServletResponse, _: Authentication ->
                 response.sendRedirect(
@@ -58,5 +52,9 @@ open class WebSecurityConfig(
 
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder())
+    }
+
+    companion object {
+        const val POWER = 12
     }
 }
