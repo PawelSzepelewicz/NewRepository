@@ -12,7 +12,7 @@ import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.UUID
 
 @Service
 class TokenServiceImpl(
@@ -35,25 +35,19 @@ class TokenServiceImpl(
     override fun confirmRegistration(user: User) {
         UUID.randomUUID().toString().let { token ->
             saveNewToken(VerificationToken(token, user))
-            val recipientAddress = user.email
-            val subject = "Registration Confirmation"
-            val endpoint = "/confirmation?token="
-            val confirmationUrl = host + endpoint + token
-            val messageText = "message.registrationSuccess"
-            val message = messages.getMessage(messageText, null, LocaleContextHolder.getLocale())
+            val confirmationUrl = "${host}/confirmation?token=${token}"
+            val message = messages.getMessage("message.registrationSuccess", null, LocaleContextHolder.getLocale())
             SimpleMailMessage().apply {
-                setTo(recipientAddress)
-                setSubject(subject)
+                setTo(user.email)
+                setSubject("token.message.subject")
                 setText("$message\n$confirmationUrl")
             }.also {mailSender.send(it)}
         }
     }
 
     override fun deleteTokenByUser(user: User) {
-        tokenRepository.getByUser(user).let {
-            if (it != null) {
-                tokenRepository.delete(it)
-            }
+        tokenRepository.getByUser(user)?.let {
+            tokenRepository.delete(it)
         }
     }
 }

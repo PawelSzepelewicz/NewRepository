@@ -8,12 +8,7 @@ import org.springframework.stereotype.Component
 class RegistrationListener(
     private val tokenService: TokenService
 ) : ApplicationListener<OnRegistrationCompleteEvent> {
-
     override fun onApplicationEvent(event: OnRegistrationCompleteEvent) {
-        confirmRegistration(event)
-    }
-
-    private fun confirmRegistration(event: OnRegistrationCompleteEvent) {
         event.user?.let {
             tokenService.confirmRegistration(it)
         }

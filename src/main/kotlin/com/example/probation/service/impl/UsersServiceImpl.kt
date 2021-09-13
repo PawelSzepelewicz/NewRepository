@@ -3,11 +3,9 @@ package com.example.probation.service.impl
 import com.example.probation.core.dto.ChangePasswordDto
 import com.example.probation.core.entity.User
 import com.example.probation.core.enums.Actions
-import com.example.probation.core.enums.Current
 import com.example.probation.core.enums.Roles
 import com.example.probation.event.OnRegistrationCompleteEvent
 import com.example.probation.exception.EntityNotFoundException
-import com.example.probation.exception.ForbiddenException
 import com.example.probation.exception.PasswordDoesNotMatchesException
 import com.example.probation.exception.TimeHasExpiredException
 import com.example.probation.repository.UsersRepository
@@ -28,17 +26,21 @@ class UsersServiceImpl(
     private val tokenService: TokenService,
     private val detailsService: CustomUserDetailsService,
     private val eventPublisher: ApplicationEventPublisher,
-    private val kafkaProducerService: KafkaProducerService
+    private val kafkaService: KafkaProducerService
 ) : UsersService {
-    companion object {
-        const val ADDITION = 15
-    }
 
-    override fun registerNewUser(newUser: User): User = newUser.apply {
+    override fun registerNewUser(newUser: User) = newUser.apply {
         password = passwordEncoder.encode(newUser.password)
-        mutableSetOf(roleService.getRoleByRoleName(Roles.USER.role))
+        roleService.getRoleByRoleName(Roles.USER.role)?.let { role ->
+            roles = mutableSetOf(role)
+        }
     }.let { usersRepository.save(it) }
-        .also { eventPublisher.publishEvent(OnRegistrationCompleteEvent(it)) }
+        .also {
+            eventPublisher.publishEvent(OnRegistrationCompleteEvent(it))
+            val currentUsername = detailsService.getCurrentUsername()
+            kafkaService.send(Actions.REGISTER.action, currentUsername, it.username)
+            it.username?.let { name -> kafkaService.send(Actions.REGISTERED.action, name, currentUsername) }
+        }
 
     override fun redefineRating(winner: User, loser: User) {
         val players: MutableList<User> = ArrayList()
@@ -47,14 +49,12 @@ class UsersServiceImpl(
         players.add(winner)
         players.add(loser)
         usersRepository.saveAll(players)
-        sendLog(Actions.CHOOSE.action, Current.CURRENT.value, winner.username)
+        kafkaService.send(Actions.CHOOSE.action, detailsService.getCurrentUsername(), winner.username)
     }
 
-    override fun getUsersForComparison() =
-        usersRepository.getRandomUsers()
+    override fun getUsersForComparison() = usersRepository.getRandomUsers()
 
-    override fun getTopUsersByRating() =
-        usersRepository.findAllByOrderByRatingDesc();
+    override fun getTopUsersByRating() = usersRepository.findAllByOrderByRatingDesc()
 
     override fun calculateWinnerRating(currentRating: Int) = currentRating + ADDITION
 
@@ -68,15 +68,17 @@ class UsersServiceImpl(
 
     override fun saveRegisteredUser(token: String) =
         tokenService.findByToken(token)?.let { verificationToken ->
-            if (verificationToken.expiryDate?.isAfter(LocalDateTime.now()) != false) {
+            if (verificationToken.expiryDate?.isAfter(LocalDateTime.now()) != true) {
                 throw TimeHasExpiredException("{time.expired}")
             }
-            tokenService.getUserByToken(token)?.apply {
-                sendLog(Actions.CONFIRM.action, username, null)
-                enabled = true
-                usersRepository.save(this)
+            tokenService.getUserByToken(token)?.enable(true)?.let {
+                usersRepository.save(it)
+            }.also {
+                it?.username?.let { name -> kafkaService.send(Actions.CONFIRM.action, name) }
             }
         }
+
+    private fun User.enable(isEnabled: Boolean) = apply { enabled = isEnabled }
 
     override fun getCurrentUser() =
         findByUserName(detailsService.getCurrentUsername())
@@ -93,81 +95,74 @@ class UsersServiceImpl(
         }
 
     override fun blockUser(userId: Long) {
-        getUserById(userId).apply {
-            enabled = false
-            usersRepository.save(this)
-        }.also { sendLog(Actions.BLOCK.action, Current.CURRENT.value, it.username) }
+        getUserById(userId).enable(false).let {
+            usersRepository.save(it)
+        }.also {
+            kafkaService.send(Actions.BLOCK.action, detailsService.getCurrentUsername(), it.username)
+        }
     }
 
     override fun unblockUser(userId: Long) {
-        getUserById(userId).apply {
-            enabled = true
-            usersRepository.save(this)
-        }.also { sendLog(Actions.UNBLOCK.action, Current.CURRENT.value, it.username) }
+        getUserById(userId).enable(true).let {
+            usersRepository.save(it)
+        }.also {
+            kafkaService.send(Actions.UNBLOCK.action, detailsService.getCurrentUsername(), it.username)
+        }
     }
 
     override fun deleteUser(userId: Long) {
         getUserById(userId).let {
             tokenService.deleteTokenByUser(it)
             usersRepository.deleteById(userId)
-            sendLog(Actions.DELETE.action, Current.CURRENT.value, it.username)
-            sendLog(Actions.DELETED.action, it.username, Current.CURRENT.value)
+            val currentUsername = detailsService.getCurrentUsername()
+            kafkaService.send(Actions.DELETE.action, currentUsername, it.username)
+            it.username?.let { name ->
+                kafkaService.send(Actions.DELETED.action, name, currentUsername)
+            }
         }
     }
 
     override fun checkUniqueNewName(newName: String, id: Long) =
-        getUserById(id).username.let {
-            newName == it || !checkUsernameExistence(newName)
+        getUserById(id).run {
+            newName == username || !checkUsernameExistence(newName)
         }
 
     override fun checkUniqueNewEmail(newEmail: String, id: Long) =
-        getUserById(id).email.let {
-            newEmail == it || !checkEmailExistence(newEmail)
+        getUserById(id).run {
+            newEmail == email || !checkEmailExistence(newEmail)
         }
 
     override fun changePersonalData(user: User) {
         user.id?.let { userId ->
-            getUserById(userId).let {
-                it.id = user.id
-                it.username = user.username
-                it.description = user.description
-                it.email = user.email
+            getUserById(userId).apply {
+                id = user.id
+                username = user.username
+                description = user.description
+                email = user.email
+            }.let {
                 usersRepository.save(it)
+            }.also {
+                it.username?.let { name -> kafkaService.send(Actions.EDIT.action, name) }
             }
         }
-        sendLog(Actions.EDIT.action, Current.CURRENT.value, null)
     }
 
     override fun changePassword(changePasswordDto: ChangePasswordDto) {
-        val user: User = getUserById(changePasswordDto.id)
-
-        if (passwordEncoder.matches(changePasswordDto.oldPassword, user.password)) {
-            user.password = passwordEncoder.encode(changePasswordDto.newPassword)
-            usersRepository.save(user)
-        } else {
-            throw PasswordDoesNotMatchesException("{password.not.matches}")
+        getUserById(changePasswordDto.id).apply {
+            if (passwordEncoder.matches(changePasswordDto.oldPassword, password)) {
+                password = passwordEncoder.encode(changePasswordDto.newPassword)
+                usersRepository.save(this)
+            } else {
+                throw PasswordDoesNotMatchesException("{password.not.matches}")
+            }
+        }.also {
+            it.username?.let { name ->
+                kafkaService.send(Actions.CHANGE_PASSWORD.action, name)
+            }
         }
-
-        sendLog(Actions.CHANGE_PASSWORD.action, Current.CURRENT.value, null)
     }
 
-    private fun searchCurrentUsernameIfExist(name: String?) =
-        if (name == Current.CURRENT.value) {
-            try {
-                detailsService.getCurrentUsername()
-            } catch (e: ForbiddenException) {
-                null
-            }
-        } else {
-            name
-        }
-
-    override fun sendLog(action: String, name: String?, subject: String?) {
-        val subjectName = searchCurrentUsernameIfExist(subject)
-        val username = searchCurrentUsernameIfExist(name)
-
-        if (username != null) {
-            kafkaProducerService.send(action, username, subjectName)
-        }
+    companion object {
+        const val ADDITION = 15
     }
 }

@@ -41,6 +41,4 @@ interface UsersService {
     fun checkUniqueNewName(newName: String, id: Long): Boolean
 
     fun checkUniqueNewEmail(newEmail: String, id: Long): Boolean
-
-    fun sendLog(action: String, name: String?, subject: String?)
 }

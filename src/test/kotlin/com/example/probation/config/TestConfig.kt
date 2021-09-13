@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.JavaMailSenderImpl
 
 @Configuration
-class TestConfig(
+open class TestConfig(
     @Value("\${spring.mail.host}") private val host: String,
     @Value("\${spring.mail.port}") private val port: Int,
     @Value("\${spring.mail.username}") private val username: String,

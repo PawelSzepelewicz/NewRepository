@@ -10,7 +10,7 @@ interface UsersRepository : JpaRepository<User, Long> {
 
     fun findAllByOrderByRatingDesc(): List<User>
 
-    fun findByUsername(username: String?): User?
+    fun findByUsername(username: String): User?
 
-    fun findByEmail(email: String?): User?
+    fun findByEmail(email: String): User?
 }
