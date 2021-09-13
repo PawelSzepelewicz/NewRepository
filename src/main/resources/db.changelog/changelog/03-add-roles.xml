@@ -21,19 +21,6 @@
              stripComments="true">
             Insert into user_roles (USER_ID,ROLE_ID) value (1, 1);
             Insert into user_roles (USER_ID,ROLE_ID) value (1, 2);
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (2, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (3, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (4, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (5, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (6, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (7, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (8, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (9, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (10, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (11, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (12, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (13, 1);-->
-<!--            Insert into user_roles (USER_ID,ROLE_ID) value (14, 1);-->
         </sql>
     </changeSet>
 </databaseChangeLog>
