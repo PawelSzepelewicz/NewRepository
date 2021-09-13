@@ -2,7 +2,6 @@ package com.example.probation.core.entity
 
 import java.time.LocalDateTime
 import javax.persistence.CascadeType
-import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.JoinColumn
@@ -13,7 +12,6 @@ import javax.persistence.Table
 @Entity
 @Table(name = "verification_token")
 class VerificationToken(
-    @Column(name = "token")
     var token: String? = null,
     @OneToOne(
         targetEntity = User::class, fetch = FetchType.EAGER,
@@ -25,7 +23,6 @@ class VerificationToken(
         inverseJoinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")]
     )
     var user: User? = null,
-    @Column(name = "expiryDate")
     var expiryDate: LocalDateTime? = null
 ) : AbstractEntity() {
     companion object {
