@@ -41,7 +41,7 @@ class TokenServiceImpl(
                 setTo(user.email)
                 setSubject("token.message.subject")
                 setText("$message\n$confirmationUrl")
-            }.also {mailSender.send(it)}
+            }.also { mailSender.send(it) }
         }
     }
 

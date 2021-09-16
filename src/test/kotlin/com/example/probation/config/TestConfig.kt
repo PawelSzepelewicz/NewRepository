@@ -11,7 +11,7 @@ open class TestConfig(
     @Value("\${spring.mail.host}") private val host: String,
     @Value("\${spring.mail.port}") private val port: Int,
     @Value("\${spring.mail.username}") private val username: String,
-    @Value("\${spring.mail.password}") private var password: String
+    @Value("\${spring.mail.password}") private var password: String,
 ) {
     @Bean
     fun javaMailSender(): JavaMailSender? {

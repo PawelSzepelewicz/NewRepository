@@ -2,13 +2,16 @@ package com.example.probation.controller
 
 import com.example.probation.core.dto.CreateUserDto
 import com.example.probation.core.entity.User
+import com.example.probation.exception.EntityNotFoundException
 import com.example.probation.repository.TokenRepository
 import com.example.probation.repository.UsersRepository
+import com.example.probation.service.UsersService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.security.test.context.support.WithUserDetails
@@ -23,6 +26,8 @@ class AccountControllerTest(
     private val tokenRepository: TokenRepository,
     @Autowired
     private val mapper: ObjectMapper,
+    @Autowired
+    private val service: UsersService,
     context: WebApplicationContext,
 ) : ControllerTest(context) {
 
@@ -56,7 +61,7 @@ class AccountControllerTest(
     }
 
     @Test
-    @Throws(java.lang.Exception::class)
+    @Throws(Exception::class)
     fun confirmRegistration() {
         val afterPerson = repository.findByUsername("User")
         assertNotNull(afterPerson)
@@ -72,5 +77,39 @@ class AccountControllerTest(
         val beforePerson = repository.findByUsername("User")
         assertNotNull(beforePerson)
         assertTrue(beforePerson!!.enabled)
+    }
+
+    @Test
+    @WithUserDetails("Admin")
+    @Throws(Exception::class)
+    fun blockAndUnblockUser() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/accounts/block/{userId}", 1)
+                .header("Content-Type", "application/json")
+        )
+        repository.getUserById(1)?.apply {
+            assertFalse(enabled)
+        }
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/accounts/unblock/{userId}", 1)
+                .header("Content-Type", "application/json")
+        )
+        repository.getUserById(1)?.apply {
+            assertTrue(enabled)
+        }
+    }
+
+    @Test
+    @WithUserDetails("Admin")
+    @Throws(Exception::class)
+    fun deleteUser() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/accounts/{userId}", 1)
+                .header("Content-Type", "application/json")
+        )
+        assertThrows<EntityNotFoundException> {
+            service.getUserById(1)
+        }
+        assertTrue(repository.getUserById(1)?.username == null)
     }
 }

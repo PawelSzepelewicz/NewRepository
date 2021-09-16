@@ -8,7 +8,7 @@ SET REFERENTIAL_INTEGRITY TRUE;
 insert into ROLES(id,role_name) values (1, 'USER');
 insert into ROLES(id,role_name) values (2, 'ADMIN');
 insert into USERS(id, username, description, rating, email, password, enabled)
-values (1, 'Admin', 'Developer', 2500, 'admin@gmail.com', '$2a$12$9jjZvojR3Bnf04b/9lrq0eRCsRp6pQFmJPaEDe3Ytq0MjYLschwJe', true);
+values (1, 'Admin', 'Developer', 2500, 'admin@gmail.com', '$2a$12$LV62Vehuivc.rtG8e5AO3uGQNv5.tMEZy0NrKEQ2GAja2tK1p1EcO', true);
 insert into USER_ROLES(user_id, role_id) values (1,1);
 insert into USER_ROLES(user_id, role_id) values (1,2);
 insert into VERIFICATION_TOKEN(id, token, expiry_date)
