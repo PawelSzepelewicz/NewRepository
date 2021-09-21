@@ -39,7 +39,6 @@ class UsersServiceImpl(
             eventPublisher.publishEvent(OnRegistrationCompleteEvent(it))
             val currentUsername = detailsService.getCurrentUsername()
             kafkaService.send(Actions.REGISTER.action, currentUsername, it.username)
-            it.username?.let { name -> kafkaService.send(Actions.REGISTERED.action, name, currentUsername) }
         }
 
     override fun redefineRating(winner: User, loser: User) {
@@ -89,10 +88,9 @@ class UsersServiceImpl(
     override fun checkUsernameExistence(username: String) =
         usersRepository.findByUsername(username) != null
 
-    private fun getUserById(id: Long): User =
-        usersRepository.findById(id).orElseThrow {
-            throw EntityNotFoundException("{entity.not.found}")
-        }
+    override fun getUserById(id: Long): User =
+        usersRepository.getUserById(id) ?: throw EntityNotFoundException("{entity.not.found}")
+
 
     override fun blockUser(userId: Long) {
         getUserById(userId).enable(false).let {
