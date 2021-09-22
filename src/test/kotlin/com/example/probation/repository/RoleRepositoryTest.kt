@@ -5,12 +5,10 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-
 class RoleRepositoryTest(
     @Autowired
     private val repository: RoleRepository
 ) : RepositoryTest() {
-
     @Test
     fun getRoleByRoleName() {
         val role = Roles.USER.role

@@ -26,7 +26,6 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Spy
-import org.mockito.invocation.InvocationOnMock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -103,13 +102,9 @@ class UsersServiceImplTest {
         VerificationToken(token, user, LocalDateTime.now().plusMinutes(120)).apply {
             Mockito.`when`(tokenService.findByToken(token)).thenReturn(this)
             Mockito.`when`(tokenService.getUserByToken(token)).thenReturn(user)
-            Mockito.`when`<Any>(usersRepository.save(any())).thenAnswer { i ->
-                i.arguments[0]
-            }
+            Mockito.`when`<Any>(usersRepository.save(any())).thenAnswer { i -> i.arguments[0] }
         }
-        service.saveRegisteredUser(token)?.apply {
-            assertTrue(enabled)
-        }
+        service.saveRegisteredUser(token)?.apply { assertTrue(enabled) }
     }
 
     @Test
@@ -205,9 +200,7 @@ class UsersServiceImplTest {
         service.changePassword(passwordDto)
         assertTrue(passwordEncoder.matches(newPassword, user.password))
         assertFalse(passwordEncoder.matches(password, user.password))
-        assertThrows(PasswordDoesNotMatchesException::class.java) {
-            service.changePassword(wrongDto)
-        }
+        assertThrows(PasswordDoesNotMatchesException::class.java) { service.changePassword(wrongDto) }
         user.username?.let { Mockito.verify(kafkaService).send(Actions.UNBLOCK.action, it) }
     }
 

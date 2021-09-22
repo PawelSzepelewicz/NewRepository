@@ -1,6 +1,7 @@
 package com.example.probation.service
 
 import com.example.probation.core.entity.Role
+import com.example.probation.core.enums.Roles
 import com.example.probation.repository.RoleRepository
 import com.example.probation.service.impl.RoleServiceImpl
 import org.junit.jupiter.api.Assertions
@@ -21,8 +22,8 @@ class RoleServiceImplTest {
 
     @Test
     fun getRoleByRoleName() {
-        val role = Role("ROLE")
-        val userRole = "USER"
+        val userRole = Roles.USER.role
+        val role = Role(userRole)
         Mockito.`when`(repository.getRoleByRoleName(any(String::class.java) ?: String())).thenReturn(role)
         Assertions.assertEquals(service.getRoleByRoleName(userRole).roleName, role.roleName)
     }

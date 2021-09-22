@@ -8,6 +8,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @Sql("/init.sql")
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @DataJpaTest
 abstract class RepositoryTest

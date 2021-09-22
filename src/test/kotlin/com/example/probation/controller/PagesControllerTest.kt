@@ -11,13 +11,11 @@ class PagesControllerTest(context: WebApplicationContext) : ControllerTest(conte
     @Test
     @Throws(Exception::class)
     fun login() {
-        mockMvc.perform(
-            SecurityMockMvcRequestBuilders
+        mockMvc.perform(SecurityMockMvcRequestBuilders
                 .formLogin("/login")
                 .user("Admin")
                 .password("@Admin0000")
-        )
-            .andExpect(MockMvcResultMatchers.status().`is`(HttpStatus.FOUND.value()))
+        ).andExpect(MockMvcResultMatchers.status().`is`(HttpStatus.FOUND.value()))
             .andExpect(SecurityMockMvcResultMatchers.authenticated())
     }
 }
