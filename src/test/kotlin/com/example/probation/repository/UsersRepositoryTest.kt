@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.util.Collections
 import java.util.stream.Collectors
 
-
 class UsersRepositoryTest(
     @Autowired
     private var repository: UsersRepository
@@ -36,13 +35,8 @@ class UsersRepositoryTest(
     @Test
     fun findAllByOrderByRatingDesc() {
         val ratings: MutableList<Int> = ArrayList()
-        repository.findAllByOrderByRatingDesc().forEach { user ->
-            ratings.add(user.rating)
-        }
-        assertEquals(
-            ratings.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList()),
-            ratings
-        )
+        repository.findAllByOrderByRatingDesc().forEach { user -> ratings.add(user.rating) }
+        assertEquals(ratings.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList()), ratings)
     }
 
     @Test

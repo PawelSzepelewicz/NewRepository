@@ -51,13 +51,9 @@ class TokenServiceImplTest {
         val user = User("Username")
         val verificationToken = VerificationToken(token, user)
         Mockito.`when`(tokenRepository.findByToken(token)).thenReturn(verificationToken)
-        service.getUserByToken(token).apply {
-            assertEquals(user.username, username)
-        }
+        service.getUserByToken(token).apply { assertEquals(user.username, username) }
         val tokenWithNullUser = VerificationToken(token, null)
         Mockito.`when`(tokenRepository.findByToken(token)).thenReturn(tokenWithNullUser)
-        assertThrows<UserNotFoundByTokenException> {
-            service.getUserByToken(token)
-        }
+        assertThrows<UserNotFoundByTokenException> { service.getUserByToken(token) }
     }
 }

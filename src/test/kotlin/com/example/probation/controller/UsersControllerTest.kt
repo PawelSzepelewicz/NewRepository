@@ -29,7 +29,6 @@ class UsersControllerTest(
     private val mapper: ObjectMapper,
     context: WebApplicationContext,
 ) : ControllerTest(context) {
-
     private val passwordEncoder: PasswordEncoder = BCryptPasswordEncoder(12)
 
     @Test
@@ -63,14 +62,8 @@ class UsersControllerTest(
             .andExpect(MockMvcResultMatchers.status().`is`(HttpStatus.OK.value()))
             .andExpect(MockMvcResultMatchers.jsonPath("$.*").isArray).andReturn()
         val json = result.response.contentAsString
-        val ratings = JsonPath.parse(json).read(
-            "$.*.rating",
-            MutableList::class.java
-        ) as List<*>
-        assertEquals(
-            ratings.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList()),
-            ratings
-        )
+        val ratings = JsonPath.parse(json).read("$.*.rating", MutableList::class.java) as List<*>
+        assertEquals(ratings.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList()), ratings)
     }
 
     @Test
@@ -79,8 +72,7 @@ class UsersControllerTest(
     fun changeRating() {
         val beforeWinnerRating = repository.findById(1L).get().rating
         val beforeLoserRating = repository.findById(2L).get().rating
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/users/{winnerId}/win/{loserId}", 1, 2)
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/{winnerId}/win/{loserId}", 1, 2)
                 .header("Content-Type", "application/json")
         ).andExpect(MockMvcResultMatchers.status().`is`(HttpStatus.OK.value()))
         val afterWinnerRating = repository.findById(1L).get().rating
@@ -94,11 +86,8 @@ class UsersControllerTest(
     @WithUserDetails("Admin")
     @Throws(Exception::class)
     fun changePassword() {
-        ChangePasswordDto(
-            1, "@Developer1609", "@Developer1600"
-        ).apply {
-            mockMvc.perform(
-                MockMvcRequestBuilders.post("/users/password")
+        ChangePasswordDto(1, "@Developer1609", "@Developer1600").apply {
+            mockMvc.perform(MockMvcRequestBuilders.post("/users/password")
                     .header("Content-Type", "application/json")
                     .content(mapper.writeValueAsString(this))
             )
@@ -113,11 +102,8 @@ class UsersControllerTest(
     @WithUserDetails("Admin")
     @Throws(Exception::class)
     fun tryingChangeWrongPassword() {
-        ChangePasswordDto(
-            1, "@WrongOldPassword", "@Developer1600"
-        ).let {
-            mockMvc.perform(
-                MockMvcRequestBuilders.post("/users/password")
+        ChangePasswordDto(1, "@WrongOldPassword", "@Developer1600").let {
+            mockMvc.perform(MockMvcRequestBuilders.post("/users/password")
                     .header("Content-Type", "application/json")
                     .content(mapper.writeValueAsString(it))
             ).andExpect(MockMvcResultMatchers.status().`is`(HttpStatus.FORBIDDEN.value()))
@@ -131,11 +117,8 @@ class UsersControllerTest(
     @WithUserDetails("Admin")
     @Throws(Exception::class)
     fun changeUsersData() {
-        ChangeInfoDto(
-            1, "Asdfghj", "Description", "asdfghj@gmail.com"
-        ).let {
-            mockMvc.perform(
-                MockMvcRequestBuilders.put("/users/update")
+        ChangeInfoDto(1, "Asdfghj", "Description", "asdfghj@gmail.com").let {
+            mockMvc.perform(MockMvcRequestBuilders.put("/users/update")
                     .header("Content-Type", "application/json")
                     .content(mapper.writeValueAsString(it))
             )
@@ -151,11 +134,8 @@ class UsersControllerTest(
     @WithUserDetails("Admin")
     @Throws(Exception::class)
     fun tryingChangeUsersDataWithNonUniqueFields() {
-        ChangeInfoDto(
-            1, "User", "Description", "asdfghj@gmail.com"
-        ).let {
-            mockMvc.perform(
-                MockMvcRequestBuilders.put("/users/update")
+        ChangeInfoDto(1, "User", "Description", "asdfghj@gmail.com").let {
+            mockMvc.perform(MockMvcRequestBuilders.put("/users/update")
                     .header("Content-Type", "application/json")
                     .content(mapper.writeValueAsString(it))
             ).andExpect(MockMvcResultMatchers.status().`is`(HttpStatus.BAD_REQUEST.value()))

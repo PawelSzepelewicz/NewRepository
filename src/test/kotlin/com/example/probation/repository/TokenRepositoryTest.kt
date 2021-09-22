@@ -21,7 +21,6 @@ class TokenRepositoryTest(
             assertEquals(it.token, token)
             assertNull(repository.findByToken(wrongToken))
         }
-
     }
 
     @Test
