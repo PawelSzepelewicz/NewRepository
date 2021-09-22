@@ -9,9 +9,9 @@
              endDelimiter=";"
              splitStatements="true"
              stripComments="true">
-            Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (1, "Max", "good man", 2500);
-            Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (2, "Piotr", "bad man", 2500);
-            Insert into USERS (ID,USER_NAME,DESCRIPTION,RATING) value (3, "Ivan", "just a man", 2500);
+            Insert into users (ID,USERNAME,DESCRIPTION,RATING,EMAIL,PASSWORD,ENABLED)
+            value (1, "Pawel Szepelewicz", "The main developer of this project", 2500, "pashashepel1997@outlook.com",
+            "$2a$12$LV62Vehuivc.rtG8e5AO3uGQNv5.tMEZy0NrKEQ2GAja2tK1p1EcO", true);
         </sql>
     </changeSet>
 </databaseChangeLog>

@@ -21,7 +21,7 @@ $(document).ready(
             }
             $.ajax({
                 type: 'POST',
-                url: `${host}/accounts`,
+                url: `/accounts`,
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
@@ -58,11 +58,11 @@ $(document).ready(
             const searchParams = new URLSearchParams(paramsString);
             $.ajax({
                 type: 'GET',
-                url: `${host}/accounts?${searchParams}`,
+                url: `/accounts?${searchParams}`,
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
-                    window.location = `${host}/login`
+                    window.location = `/login`
                 }
             })
         }
